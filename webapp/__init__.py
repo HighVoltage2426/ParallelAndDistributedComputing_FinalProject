@@ -7,5 +7,4 @@ def createApp():
     from .pages import views
     app.register_blueprint(views, url_prefix = '/')
     
-    
     return app  
