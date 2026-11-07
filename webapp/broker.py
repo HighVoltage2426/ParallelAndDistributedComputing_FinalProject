@@ -16,7 +16,6 @@ class Broker:
     def publish(self, topic, message):
         
         open_db = sqlite3.connect(dbname)
-        
         open_db.execute('''INSERT INTO QUEUE (ID, QUEUE, TYPE) VALUES (?,?,?)''',
                         (message["session_id"], message["queue_number"], message["topic"]))
         

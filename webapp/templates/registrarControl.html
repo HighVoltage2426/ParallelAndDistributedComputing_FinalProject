@@ -12,7 +12,7 @@
         <h2>Window {{ window }}</h2>
         <p>Next and Finish buttons will go here.</p>
 
-        <form method="post" action="{{ url_for('views.logout') }}">
+        <form method="post" action="{{ url_for('auth.logout') }}">
             <button type="submit">Sign out</button>
         </form>
 
