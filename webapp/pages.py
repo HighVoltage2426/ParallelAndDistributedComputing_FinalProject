@@ -4,8 +4,16 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 
 views = Blueprint('views', __name__)
 
-# PIN FOR LOGIN SCREEN (REGISTRAR)
-REGISTRAR_PIN = "1234"
+# ADMIN CREDENTIALS (one 4-digit PIN per window)
+# PIN : which kind of admin, and which window they run
+ADMIN_PINS = {
+    "1001": {"role": "cashier",   "window": 1},
+    "1002": {"role": "cashier",   "window": 2},
+    "1003": {"role": "cashier",   "window": 3},
+    "0001": {"role": "registrar", "window": 1},
+    "0002": {"role": "registrar", "window": 2},
+    "0003": {"role": "registrar", "window": 3},
+}
 
 @views.route('/')
 def home():
@@ -20,21 +28,31 @@ def qRegistrar():
     return render_template("qRegistrar.html")
 
 
-# REGISTRAR LOGIN PAGES
+# ADMIN LOGIN PAGES (Cashier and Registrar)
 @views.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if request.form.get('pin') == REGISTRAR_PIN:
-            session['is_registrar'] = True
+        admin = ADMIN_PINS.get(request.form.get('pin'))
+        if admin:
+            session['role'] = admin['role']
+            session['window'] = admin['window']
+            if admin['role'] == 'cashier':
+                return redirect(url_for('views.cashierControl'))
             return redirect(url_for('views.registrarControl'))
         flash("Incorrect PIN.")
     return render_template("login.html")
 
+@views.route('/cashier')
+def cashierControl():
+    if session.get('role') != 'cashier':
+        return redirect(url_for('views.login'))
+    return render_template("cashierControl.html", window=session['window'])
+
 @views.route('/registrar')
 def registrarControl():
-    if not session.get('is_registrar'):
+    if session.get('role') != 'registrar':
         return redirect(url_for('views.login'))
-    return render_template("registrarControl.html")
+    return render_template("registrarControl.html", window=session['window'])
 
 @views.route('/logout', methods=['POST'])
 def logout():

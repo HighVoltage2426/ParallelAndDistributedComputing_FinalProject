@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Control</title>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Cashier Control</h1>
+        <h2>Window {{ window }}</h2>
+        <p>Next and Finish buttons will go here.</p>
+
+        <form method="post" action="{{ url_for('views.logout') }}">
+            <button type="submit">Sign out</button>
+        </form>
+
+    </div>
+</body>
+</html>
