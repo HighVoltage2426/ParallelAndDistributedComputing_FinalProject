@@ -9,9 +9,17 @@
     <div class="container"> 
         {% block content %}
 
-            <a href = "qCashier"> <button>Line for Cashier</button> </a>
+            <form action="/qCashier" method="POST">
+                <button type="submit">
+                    Line for Cashier
+                </button>
+            </form>
 
-            <a href = "qRegistrar"> <button>Line for Registrar</button> </a>
+            <form action="/qRegistrar" method="POST">
+                <button type="submit">
+                    Line for Registrar
+                </button>
+            </form>
         
         {% endblock %}
     </div>
