@@ -45,12 +45,12 @@ def qRegistrar():
         open_db.close()
         return render_template ('qRegistrar.html', queue_number=personal_queue_number)
     
-    max = open_db.execute("SELECT MAX(QUEUE) FROM QUEUE").fetchone
+    max = open_db.execute("SELECT MAX(QUEUE) FROM QUEUE").fetchone()[0]
                             
-    if max[0] is None:
+    if max is None:
         queue_number = 1
     else:
-        queue_number = max[0] + 1
+        queue_number = max + 1
     
     broker.publish("REGISTRAR", {"session_id": session_id, "queue_number": queue_number, "topic": topic})    
     
