@@ -35,5 +35,5 @@ if not os.path.exists(dbName):
     db.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
     
