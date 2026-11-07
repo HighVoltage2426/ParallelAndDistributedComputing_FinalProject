@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUEUE IT</title>
+    <title>{% block title %} High-Q {% endblock %}</title>
 </head>
 <body>
     <div class="container"> 
@@ -18,6 +18,12 @@
             <form action="/qRegistrar" method="POST">
                 <button type="submit">
                     Line for Registrar
+                </button>
+            </form>
+
+            <form action="/login" method="POST">
+                <button type="submit">
+                    ADMIN LOG IN
                 </button>
             </form>
         
