@@ -1,8 +1,16 @@
 #this contains routes of the webapp
 
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+import uuid
+import sqlite3
+from .broker import Broker
+from .subscriber import subscriber
 
-views = Blueprint('views', __name__)
+pages = Blueprint('pages', __name__)
+dbName = "HighQ.db"
+
+
+pages = Blueprint('views', __name__)
 
 # ADMIN CREDENTIALS (one 4-digit PIN per window)
 # PIN : which kind of admin, and which window they run
@@ -14,16 +22,6 @@ ADMIN_PINS = {
     "1202": {"role": "registrar", "window": 2},
     "1203": {"role": "registrar", "window": 3},
 }
-
-@views.route('/')
-from flask import Blueprint, render_template,session
-import uuid
-import sqlite3
-from .broker import Broker
-from .subscriber import subscriber
-
-pages = Blueprint('pages', __name__)
-dbName = "HighQ.db"
 
 @pages.route('/')
 def home():
@@ -79,7 +77,7 @@ def qRegistrar():
 
 
 # ADMIN LOGIN PAGES (Cashier and Registrar)
-@views.route('/staff', methods=['GET', 'POST']) 
+@pages.route('/staff', methods=['GET', 'POST']) 
 def login():
     if request.method == 'POST':
         admin = ADMIN_PINS.get(request.form.get('pin'))
@@ -92,19 +90,19 @@ def login():
         flash("Incorrect PIN.")
     return render_template("login.html")
 
-@views.route('/cashier')
+@pages.route('/cashier')
 def cashierControl():
     if session.get('role') != 'cashier':
         return redirect(url_for('views.login'))
     return render_template("cashierControl.html", window=session['window'])
 
-@views.route('/registrar')
+@pages.route('/registrar')
 def registrarControl():
     if session.get('role') != 'registrar':
         return redirect(url_for('views.login'))
     return render_template("registrarControl.html", window=session['window'])
 
-@views.route('/logout', methods=['POST'])
+@pages.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     return redirect(url_for('views.login'))
