@@ -7,12 +7,12 @@ views = Blueprint('views', __name__)
 # ADMIN CREDENTIALS (one 4-digit PIN per window)
 # PIN : which kind of admin, and which window they run
 ADMIN_PINS = {
-    "1201": {"role": "cashier",   "window": 1},
-    "1202": {"role": "cashier",   "window": 2},
-    "1203": {"role": "cashier",   "window": 3},
-    "1101": {"role": "registrar", "window": 1},
-    "1102": {"role": "registrar", "window": 2},
-    "1103": {"role": "registrar", "window": 3},
+    "1101": {"role": "cashier",   "window": 1},
+    "1102": {"role": "cashier",   "window": 2},
+    "1103": {"role": "cashier",   "window": 3},
+    "1201": {"role": "registrar", "window": 1},
+    "1202": {"role": "registrar", "window": 2},
+    "1203": {"role": "registrar", "window": 3},
 }
 
 @views.route('/')
