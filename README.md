@@ -56,3 +56,12 @@ Open <http://127.0.0.1:5000/> in your browser
 ## Development note
 
 The app currently runs in Flask's development mode with debugging enabled. This is suitable for local development only; do not use the development server or debug mode for a public production deployment.
+
+## PINS for Admin (By Windows)
+
+Cashier 1 - 1201
+Cashier 2 - 1202
+Cashier 3 - 1203
+Registrar 1 - 1101
+Registrar 2 - 1102
+Registrar 3 - 1103
