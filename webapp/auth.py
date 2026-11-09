@@ -18,7 +18,7 @@ def login_screen():
     return render_template('login.html')
 
 # ADMIN LOGIN PAGES (Cashier and Registrar)
-@auth.route('/staff', methods=['GET', 'POST']) 
+@auth.route('/admin', methods=['GET', 'POST']) 
 def login():
     if request.method == 'POST':
         admin = ADMIN_PINS.get(request.form.get('pin'))
