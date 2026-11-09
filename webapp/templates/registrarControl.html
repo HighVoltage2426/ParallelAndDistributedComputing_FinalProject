@@ -6,7 +6,24 @@
 
     <h1>Registrar Control</h1>
     <h2>Window {{ window }}</h2>
-    <p>Next and Finish buttons will go here.</p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p style="color: red;">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    <h3>Now serving: {% if serving %}REG-{{ serving }}{% else %}no one{% endif %}</h3>
+    <p>Waiting in line: {{ waiting }}</p>
+
+    <form method="post" action="{{ url_for('auth.next_customer') }}">
+        <button type="submit">Next</button>
+    </form>
+
+    <form method="post" action="{{ url_for('auth.finish') }}"
+          onsubmit="return confirm('This deletes ALL queue data for every window. Continue?');">
+        <button type="submit">Finish</button>
+    </form>
 
     <form method="post" action="{{ url_for('auth.logout') }}">
         <button type="submit">Sign out</button>
