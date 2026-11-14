@@ -1,35 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{%block title%}High-Q Admin Log-In{%endblock%}</title>
-</head>
-<body>
-    <div class="container"> 
-        {%block content%}
+{% extends "base.html" %}
 
-            <h1>Registrar Login</h1>
-            <p>High Voltage Only Page.</p>
+{% block title %}High-Q Admin Log-In{% endblock %}
 
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <p style="color: red;">{{ messages[0] }}</p>
-                {% endif %}
-            {% endwith %}
+{% block content %}
 
-            <form method="post">
-                <label for="pin">Enter 4-digit PIN</label><br>
-                <input id="pin" name="pin" type="password" inputmode="numeric"
-                    pattern="[0-9]{4}" minlength="4" maxlength="4"
-                    required autofocus><br><br>
+    <h1>Admin Login</h1>
+    <p>High Voltage Only Page.</p>
 
-                <button type="submit">Sign in</button>
-            </form>
-        {%endblock%}
-    </div>
-</body>
-</html>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p style="color: red;">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
 
+    <form method="post" action="{{ url_for('auth.login') }}">
+        <label for="pin">Enter 4-digit PIN</label><br>
+        <input id="pin" name="pin" type="password" inputmode="numeric"
+            pattern="[0-9]{4}" minlength="4" maxlength="4"
+            required autofocus><br><br>
 
+        <button type="submit">Sign in</button>
+    </form>
 
+{% endblock %}

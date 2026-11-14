@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier Control</title>
-</head>
-<body>
-    <div class="container">
+{% extends "base.html" %}
 
-        <h1>Cashier Control</h1>
-        <h2>Window {{ window }}</h2>
-        <p>Next and Finish buttons will go here.</p>
+{% block title %}Cashier Control{% endblock %}
 
-        <form method="post" action="{{ url_for('auth.logout') }}">
-            <button type="submit">Sign out</button>
-        </form>
+{% block content %}
 
-    </div>
-</body>
-</html>
+    <h1>Cashier Control</h1>
+    <h2>Window {{ window }}</h2>
+
+      <!-- Placeholder for Next and Finish Buttons-->
+    <p>Next and Finish buttons will go here.</p>
+
+    <!-- Logout Form Action-->
+    <form method="post" action="{{ url_for('auth.logout') }}">
+        <button type="submit">Sign out</button>
+    </form>
+
+{% endblock %}
