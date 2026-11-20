@@ -9,16 +9,19 @@
     <div class="container"> 
         {% block content %}
 
-            <form action="/qCashier" method="POST">
-                <button type="submit">
-                    Line for Cashier
-                </button>
+        <h1>Welcome to WVSU Admin</h1>
+        <p>Please select a service to join the queue.
+
+            <form action="/qCashier">
+                <h2>Cashier</h2>
+                <p>Live - <span></span> waiting </p>
+                <button type="submit">Join Queue </button>
             </form>
 
-            <form action="/qRegistrar" method="POST">
-                <button type="submit">
-                    Line for Registrar
-                </button>
+            <form action="/qRegistrar">
+                <h2>Registrar</h2>
+                <p>Live - <span></span> waiting </p>
+                <button type="submit">Join Queue</button>
             </form>
         
         {% endblock %}
