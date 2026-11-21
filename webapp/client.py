@@ -1,15 +1,9 @@
 import uuid
 import sqlite3
-
 from flask import Blueprint, render_template, session, flash, redirect, url_for
-from .event_bus import Broker
-from .subscriber import create_queue
 
 client = Blueprint('client', __name__)
 dbName = 'HighQ.db'
-join_queue = 'JOIN_QUEUE'
-broker = Broker()
-broker.subscribe(join_queue, create_queue)
 
 #THIS CHECKS IF THE CURRENT DEVICE HAS AN ACTIVE SESSION
 def getID():
@@ -47,13 +41,14 @@ def isExisting(session_id):
 #CLIENT GETTING IN LINE    
 def line(topic):
     session_id = getID()
+
     
     if isExisting(session_id):
         db = sqlite3.connect(dbName)
         row = db.execute('SELECT QUEUE, TYPE FROM QUEUE WHERE ID  = ?', (session_id,)).fetchone()
         q_number = row[0]
         q_type = row[1]
-        number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (q_type,)).fetchone()[0] - 1
+        number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ? AND QUEUE < ?', (q_type, q_number,)).fetchone()[0] - 1
         wait_time = number_infront * 3
         db.close()
         
@@ -63,18 +58,22 @@ def line(topic):
             else:
                 return redirect(url_for('client.qCashier'))  
         return q_number, number_infront, wait_time
-        
-            
-    message = {
-        'session_id': session_id,
-        'topic': topic
-    }
     
-    broker.publish(join_queue, message)
-    flash(f"You have successfully joined the {topic} Queue!")
     db = sqlite3.connect(dbName)
+    recent = db.execute('SELECT MAX(QUEUE) FROM QUEUE WHERE TYPE = ?', (topic,)).fetchone()
+    if recent[0] is None:
+        q_number = 1
+    else:
+        q_number = recent[0] + 1
+        
+    db.execute('INSERT INTO QUEUE (ID, QUEUE, TYPE) VALUES (?, ?, ?)', (session_id, q_number, topic))
+    db.commit()
+        
+    
+    flash(f"You have successfully joined the {topic} Queue!")
     q_number = db.execute('SELECT QUEUE FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()[0]
-    number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (topic,)).fetchone()[0] - 1
+    
+    number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ? AND QUEUE < ?', (q_type, q_number,)).fetchone()[0] - 1
     wait_time = number_infront * 3
     db.close()
     
