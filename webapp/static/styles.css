@@ -7,6 +7,11 @@ body {
     text-align: center;
 }
 
+section {
+    margin: 20px 0;
+}
+
+/* from base.html*/
 .join_bbtn_container {
     display: flex;
     flex-direction: column;
@@ -20,10 +25,13 @@ body {
     gap: 5px;
 }
 
+/*general*/
 table {
     border: 1px black solid;
     width: 100%;
 }
+
+/*for qCashier.html and qRegistrar.html*/
 
 .q_number {
     font-size: 3em;
@@ -32,5 +40,74 @@ table {
 
 .number_infront, .wait_time {
     display:  flex;
+    justify-content: space-around;
+}
+
+/*for cashierControl.html*/
+
+.cashierControl {
+    text-align: left;
+}
+
+.informations{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
     justify-content: space-between;
+    text-align: left;
+}
+
+.informations div {
+    width: 250px;
+    height: 150px;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px;
+}
+
+.informations p {
+    font-size: 40px;
+    margin: 0;
+}
+
+.now_serving p {
+    margin: 0;
+}
+
+.now_serving_bttn {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+}
+
+.radio-buttons {
+    list-style: none;
+    padding: 0px;
+    display: flex;
+    gap: 10px;
+}
+
+.radio-buttons input[type="radio"] {
+    display: none;
+}
+
+.radio-buttons label {
+    background-color: grey;
+    padding: 10px
+}
+
+.radio-buttons input[type="radio"]:checked + label {
+background-color: #4caf50;
+color: white;
+border-color: #4caf50;
 }

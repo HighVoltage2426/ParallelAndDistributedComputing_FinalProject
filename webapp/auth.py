@@ -1,6 +1,6 @@
 import sqlite3
 import threading
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 
 auth = Blueprint('auth', __name__)
 dbName = "HighQ.db"
@@ -17,7 +17,6 @@ ADMIN_PINS = {
     "1202": {"role": "registrar", "window": 2},
     "1203": {"role": "registrar", "window": 3},
 }
-
 
 # DATABASE METHODS
 def line_status(line, window): # Shows the number that a specific window is serving 
@@ -38,7 +37,12 @@ def control_page():
     return url_for('auth.cashierControl' if session.get('role') == 'cashier'
                    else 'auth.registrarControl')
 
-
+def waiting_list(q_type):
+    db = sqlite3.connect(dbName)
+    list = db.execute("SELECT QUEUE FROM QUEUE WHERE TYPE = ?", (q_type,)).fetchall()
+    
+    return list
+    
 # LOGIN METHODS
 @auth.route('/login', methods=['POST'])
 def login_screen():
@@ -58,13 +62,19 @@ def login():
         flash("Incorrect PIN.")
     return render_template("login.html")
 
+
 @auth.route('/cashier')
 def cashierControl():
+    type = "CASHIER"
+    
     if session.get('role') != 'cashier':
         return redirect(url_for('auth.login'))
+    
     serving, waiting = line_status('CASHIER', session['window'])
-    return render_template("cashierControl.html", window=session['window'],
-                           serving=serving, waiting=waiting)
+    
+    list = waiting_list(type)
+    
+    return render_template("cashierControl.html", window=session ['window'], current_client=serving, total_waiting=waiting, waiting_list = list)
 
 @auth.route('/registrar')
 def registrarControl():
@@ -78,7 +88,6 @@ def registrarControl():
 def logout():
     session.clear()
     return redirect(url_for('auth.login'))
-
 
 # NEXT BUTTON LOGIC METHODS
 @auth.route('/next', methods=['POST'])

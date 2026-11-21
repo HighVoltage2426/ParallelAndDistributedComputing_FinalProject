@@ -2,7 +2,7 @@ import uuid
 import sqlite3
 
 from flask import Blueprint, render_template, session, flash, redirect, url_for
-from .broker import Broker
+from .event_bus import Broker
 from .subscriber import create_queue
 
 client = Blueprint('client', __name__)
