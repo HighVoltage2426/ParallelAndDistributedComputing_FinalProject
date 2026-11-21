@@ -45,7 +45,16 @@ table {
 
 /*for cashierControl.html*/
 
+.heading-right {
+    display: flex;
+    flex-direction: column;
+}
+
 .cashierControl {
+    text-align: left;
+}
+
+.registrarControl {
     text-align: left;
 }
 
