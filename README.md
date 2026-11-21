@@ -16,10 +16,10 @@ py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-Install Flask in the active environment:
+Install Dependencies in the active environment:
 
 ```powershell
-python -m pip install Flask
+pip install -r requirements.txt
 ```
 
 If PowerShell prevents environment activation, use the virtual environment's Python directly for both installation and running:
