@@ -53,6 +53,8 @@ def line(topic):
         row = db.execute('SELECT QUEUE, TYPE FROM QUEUE WHERE ID  = ?', (session_id,)).fetchone()
         q_number = row[0]
         q_type = row[1]
+        number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (q_type,)).fetchone()[0] - 1
+        wait_time = number_infront * 3
         db.close()
         
         if q_type != topic:
@@ -60,7 +62,7 @@ def line(topic):
                 return redirect (url_for('client.qRegistrar'))
             else:
                 return redirect(url_for('client.qCashier'))  
-        return q_number
+        return q_number, number_infront, wait_time
         
             
     message = {
@@ -72,29 +74,31 @@ def line(topic):
     flash(f"You have successfully joined the {topic} Queue!")
     db = sqlite3.connect(dbName)
     q_number = db.execute('SELECT QUEUE FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()[0]
+    number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (topic,)).fetchone()[0] - 1
+    wait_time = number_infront * 3
     db.close()
     
-    return q_number
+    return q_number, number_infront, wait_time
     
 #LINE FOR REGISTRAR
 @client.route('/qRegistrar')
 def qRegistrar():
     result  = line('REGISTRAR')
     
-    if not isinstance(result, int):
+    if not isinstance(result, tuple):
         return result
-        
-    return render_template('qRegistrar.html', q_number = f"{result:03d}")
+    
+    return render_template('qRegistrar.html', q_number = f"{result[0]:03d}", number_infront = result[1], wait_time = result[2])
 
 #LINE FOR CASHIER
 @client.route('/qCashier')
 def qCashier():
     result  = line('CASHIER')
     
-    if not isinstance(result, int):
+    if not isinstance(result, tuple):
         return result
-        
-    return render_template('qCashier.html', q_number = f"{result:03d}")
+            
+    return render_template('qCashier.html', q_number = f"{result[0]:03d}", number_infront = result[1], wait_time = result[2])
 
 
 #EXIT FROM THE LINE

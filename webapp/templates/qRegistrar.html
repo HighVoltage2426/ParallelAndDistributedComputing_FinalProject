@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {%block content%}
 
     {% with messages = get_flashed_messages() %}
@@ -12,32 +13,33 @@
             </script>
         {% endif %}
     {% endwith %}
-
-    <h2>Queue Status</h2>
-    <p> </p>
-
-    <div class="currently_serving">
-        <table>
-            <tr> <th>Window</th><th>Customer</th> </tr>
-            <tr> <td>Window 1</td> <td>Hello</td> </tr>
-            <tr> <td>Window 2</td> <td>Hello</td> </tr>
-            <tr> <td>Window 3</td> <td>Hello</td> </tr>
-        </table>
-    </div>
-    <p>Your Number</p> <br>
-    <h1>REG-{{ q_number }}</h1>
-
-    <div class="ahead">
-        <p> People ahead of you </p>
-        <p> <strong>{{ ahead }} Sample</strong></p>
-    </div>
-
-    <div class="wait_time">
-        <p> Estimated Wait Time </p>
-        <p> <strong>{{ wait_time }} Sample</strong></p>
-    </div>
     
-    <button commandFor="leave_warning" command="show-modal">Leave Queue</button>
+    <main>
+        <h2>Registrar Queue</h2>
+
+        <div class="currently_serving">
+            <table>
+                <tr> <th>Window</th><th>Customer</th> </tr>
+                <tr> <td>Window 1</td> <td>Hello</td> </tr>
+                <tr> <td>Window 2</td> <td>Hello</td> </tr>
+                <tr> <td>Window 3</td> <td>Hello</td> </tr>
+            </table>
+        </div>
+        <p>Your Number</p>
+        <p class = "q_number"> REG-{{ q_number }} </p>
+
+        <div class="number_infront">
+            <p> People ahead of you </p>
+            <p> <strong>{{ number_infront }}</strong></p>
+        </div>
+
+        <div class="wait_time">
+            <p> Estimated Wait Time </p>
+            <p> <strong>{{ wait_time }}</strong></p>
+        </div>
+        
+        <button commandFor="leave_warning" command="show-modal">Leave Queue</button>
+    </main>
     
     <dialog id="leave_warning">
         <h2>Leave the Queue?</h2>
