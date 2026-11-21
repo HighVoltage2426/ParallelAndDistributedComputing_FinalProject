@@ -4,29 +4,135 @@
 
 {% block content %}
 
-    <h1>Registrar Control</h1>
-    <h2>Window {{ window }}</h2>
+    <main class="registrarControl">
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <p style="color: red;">{{ messages[0] }}</p>
-        {% endif %}
-    {% endwith %}
+        <section class = "heading">
+            <div class="heading_right">
+                <h1> Registrar Control - Window {{ window }}</h1>
+                <p> {{current_date}} </p>
+            </div>
+            
+            <div class="window_status">
+                <form action="change_window_status" method="POST" id="windowStatusForm">
 
-    <h3>Now serving: {% if serving %}REG-{{ serving }}{% else %}no one{% endif %}</h3>
-    <p>Waiting in line: {{ waiting }}</p>
+                    <ul class="radio-buttons">
 
-    <form method="post" action="{{ url_for('auth.next_customer') }}">
-        <button type="submit">Next</button>
-    </form>
+                        <li> <input type="radio" name="window_status" id="open"  value="open"
+                            {% if window_status == 'open'%}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <label for="open">OPEN</label> </li>
+    
+                        <li> <input type="radio"  name="window_status" id="break" value="break" 
+                            {% if window_status == 'break'%}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <label for="break">BREAK</label> </li>
+    
+                        <li> <input type="radio" name="window_status" id="close" value="close" 
+                            {% if window_status == 'close' or not window_status %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <label for="close">CLOSE</label> </li>
 
-    <form method="post" action="{{ url_for('auth.finish') }}"
-          onsubmit="return confirm('This deletes ALL queue data for every window. Continue?');">
-        <button type="submit">Finish</button>
-    </form>
+                    </ul>
 
+                </form>
+            </div>
+            
+
+        </section>
+    
+        <section class="informations">
+            <div class="waiting">
+                <h3>WAITING</h3>
+                <p id="registrar_waiting">{{ total_waiting }}</p>
+            </div>
+        
+            <div class="completed">
+                <h3>SERVED TODAY</h3>
+                <p id="registrar_completed">{{ total_completed }}</p>
+            </div>
+    
+            <div class="avg_wait">
+                <h3>AVERAGE WAIT TIME</h3>
+                <p id="registrar_avg_wait">{{ total_completed }}</p>
+            </div>
+    
+            <div class="avg_service">
+                <h3>AVERAGE SERVICE TIME</h3>
+                <p id="registrar_avg_service">{{ total_completed }}</p>
+            </div>
+        </section>
+    
+        <section class="now_serving">
+            <p>NOW SERVING</p>
+            <p class="q_number" id="registrar_now_serving">{%if current_client is none%}READY FOR SERVICE...{%else%} {{"REG-"~"%03d"|format(current_client) }}{%endif%}</p>
+            
+            <div class="now_serving_bttn">
+                <form action="/next", method="POST">
+                    <button type="submitted" {%if window_status != 'open'%}disabled{%endif%}> NEXT </button>
+                </form>
+            </div>
+        </section>
+
+        <section class="waiting_list">
+            <table>
+                <thead>
+                    <tr> 
+                        <th>Ticket No.</th> 
+                        <th>Joined At</th>
+                    </tr>
+                </thead>
+                <tbody id="registrar_waiting_list">
+                    {% for row in waiting_list %}
+                        <tr> 
+                            <td>REG-{{"%03d"|format(row.q_number)}}</td> 
+                            <td>{{ row.joined_at }}</td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+    
+    <!-- Logout Form Action-->
     <form method="post" action="{{ url_for('auth.logout') }}">
         <button type="submit">Sign out</button>
     </form>
 
+<script>
+    setInterval(async () => {
+        const res = await fetch("{{ url_for('auth.registrar_status') }}");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        document.getElementById("registrar_waiting").textContent = data.total_waiting;
+        document.getElementById("registrar_completed").textContent = data.total_completed;
+        document.getElementById("registrar_avg_wait").textContent = data.total_completed;
+        document.getElementById("registrar_avg_service").textContent = data.total_completed;
+
+        document.getElementById("registrar_now_serving").textContent =
+            data.current_client !== null && data.current_client !== undefined
+                ? `REG-${String(data.current_client).padStart(3, "0")}`
+                : "READY FOR SERVICE...";
+
+        const tbody = document.getElementById("registrar_waiting_list");
+        tbody.innerHTML = "";
+        for (const item of data.waiting_list || []) {
+            const ticketNum = typeof item === "object" ? item.q_number : item;
+            const joinedAt = typeof item === "object" ? (item.joined_at || "-") : "-";
+
+            const tr = document.createElement("tr");
+
+            const tdTicket = document.createElement("td");
+            tdTicket.textContent = `REG-${String(ticketNum).padStart(3, "0")}`;
+
+            const tdJoined = document.createElement("td");
+            tdJoined.textContent = joinedAt;
+
+            tr.appendChild(tdTicket);
+            tr.appendChild(tdJoined);
+            tbody.appendChild(tr);
+        }
+    }, 2000);
+</script>
 {% endblock %}

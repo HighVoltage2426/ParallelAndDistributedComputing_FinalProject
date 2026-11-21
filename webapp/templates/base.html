@@ -16,13 +16,13 @@
         <div class="join_bbtn_container">
             <form action="/qCashier" class="join_queue_bttn">
                 <h2>Cashier</h2>
-                <p>Live - <span></span> waiting </p>
+                <p>Live - <span>{{cashier_wait_count}}</span> waiting </p>
                 <button type="submit">Join Queue </button>
             </form>
 
             <form action="/qRegistrar" class="join_queue_bttn">
                 <h2>Registrar</h2>
-                <p>Live - <span></span> waiting </p>
+                <p>Live - <span>{{registrar_wait_count}}</span> waiting </p>
                 <button type="submit">Join Queue</button>
             </form>
         </div>

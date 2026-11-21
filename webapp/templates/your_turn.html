@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <main>
+        <p>Please proceed to {{ office_label }} - Window {{ serving_window }}.</p>
+
+        <p>Your Ticket: {{ prefix }} - {{ q_number }}<br>
+        Served at: {{ served_at }}</p>
+
+        <p>Did you miss your turn? Be sure to screenshot this message and show it at the window.</p>
+        <p><i>Please note: Accommodation of missed turn is subject to the discretion of the personnel-in-charge. You might need to line again.</i></p>
+
+        <a href="{{ url_for('client.home') }}">Back to Queue Home</a>
+    </main>
+{% endblock %}
