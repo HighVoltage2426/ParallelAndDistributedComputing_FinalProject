@@ -39,20 +39,6 @@ python main.py
 
 Open <http://127.0.0.1:5000/> in your browser
 
-## Project layout
-
-```text
-.
-├── main.py                 # Starts the Flask development server
-└── webapp/
-    ├── __init__.py          # Creates the Flask app and registers routes
-    ├── pages.py             # Page routes
-    └── templates/
-        ├── base.html        # Home page
-        ├── qCashier.html    # Cashier queue page
-        └── qRegistrar.html  # Registrar queue page
-```
-
 ## Development note
 
 The app currently runs in Flask's development mode with debugging enabled. This is suitable for local development only; do not use the development server or debug mode for a public production deployment.
