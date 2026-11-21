@@ -1,5 +1,53 @@
+{% extends "base.html" %}
 {%block content%}
 
-    <h1>Your Queue Number is CASH-<h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <dialog id="success_modal">
+                <h2>Success!</h2>
+                <p>{{ messages[0] }}</p>
+                <button type="button" onclick="document.getElementById('success_modal').close()">Got it</button>
+            </dialog>
+            <script>
+                document.getElementById('success_modal').showModal();
+            </script>
+        {% endif %}
+    {% endwith %}
+    
+    <main>
+        <h2>Cashier Queue</h2>
 
+        <div class="currently_serving">
+            <table>
+                <tr> <th>Window</th><th>Customer</th> </tr>
+                <tr> <td>Window 1</td> <td>Hello</td> </tr>
+                <tr> <td>Window 2</td> <td>Hello</td> </tr>
+                <tr> <td>Window 3</td> <td>Hello</td> </tr>
+            </table>
+        </div>
+        <p>Your Number</p>
+        <p class = "q_number"> CASH-{{ q_number }} </p>
+
+        <div class="number_infront">
+            <p> People ahead of you </p>
+            <p> <strong>{{ number_infront }}</strong></p>
+        </div>
+
+        <div class="wait_time">
+            <p> Estimated Wait Time </p>
+            <p> <strong>{{ wait_time }}</strong></p>
+        </div>
+        
+        <button commandFor="leave_warning" command="show-modal">Leave Queue</button>
+    </main>
+    
+    <dialog id="leave_warning">
+        <h2>Leave the Queue?</h2>
+        <p> You will lose your current sport in line and will need to get a new ticket later. </p>
+        <button commandFor="leave_warning" command="close"> Keep Spot </button>
+        <form action="/leave">
+            <button>Leave Queue</button>
+        </form>
+    </dialog>
+    
 {%endblock%}

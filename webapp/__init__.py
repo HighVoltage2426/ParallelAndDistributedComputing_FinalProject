@@ -2,13 +2,12 @@ from flask import Flask
 
 def createApp():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'High Voltage' #S ecures the session and cookie data
+    app.config['SECRET_KEY'] = 'High Voltage'
+    
+    from .pages import pages
+    app.register_blueprint(pages, url_prefix = '/')
     
     from .client import client
-    from .auth import auth
-
-    
     app.register_blueprint(client, url_prefix = '/')
-    app.register_blueprint(auth, url_prefix = '/')
     
     return app  

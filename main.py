@@ -26,11 +26,6 @@ if not os.path.exists(dbName):
                         QUEUE INT NOT NULL,
                         WINDOW INT NOT NULL,
                         TYPE TEXT NOT NULL);
-                        
-                        CREATE TABLE IF NOT EXISTS CREDENTIALS (
-                        ID INT PRIMARY KEY NOT NULL,
-                        USER_ID TEXT NOT NULL,
-                        PASSWORD TEXT NOT NULL);
                      ''')    
     db.close()
 

@@ -1,61 +1,116 @@
-from flask import Blueprint, render_template,session
 import uuid
 import sqlite3
+
+from flask import Blueprint, render_template, session, flash, redirect, url_for
 from .broker import Broker
-from .subscriber import subscriber
+from .subscriber import create_queue
 
 client = Blueprint('client', __name__)
-dbName = "HighQ.db"
-
-@client.route('/')
-def home():
-    return render_template("base.html")
-
-@client.route('/qCashier')
-def qCashier():
-    return render_template("qCashier.html")
-
-#QUEUE FOR REGISTRAR
+dbName = 'HighQ.db'
+join_queue = 'JOIN_QUEUE'
 broker = Broker()
+broker.subscribe(join_queue, create_queue)
 
-def isExisting(session_id):
-    open_db = sqlite3.connect(dbName)
-    cursor = open_db.execute('SELECT ID FROM QUEUE WHERE ID = ?', (session_id,))
-    existing = cursor.fetchone()
-    
-    if existing is None:
-        return False
-    else: 
-        return True
-    
-@client.route('/qRegistrar', methods = ['POST'])
-def qRegistrar():
-    open_db = sqlite3.connect(dbName)
-    topic = "REGISTRAR"
-    
-    broker = Broker()
-    broker.subscribe(topic, subscriber)
-    
+#THIS CHECKS IF THE CURRENT DEVICE HAS AN ACTIVE SESSION
+def getID():
     if 'session_id' not in session:
         session['session_id'] = str(uuid.uuid4())
     session_id = session['session_id']
+    return session_id
+
+#HOME
+@client.route('/')
+def home():
+    session_id = getID()
+    db = sqlite3.connect(dbName)
+    topic = db.execute('SELECT TYPE FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()
+    db.close()
     
-    if isExisting(session_id,):
-        personal_queue_number = open_db.execute('SELECT QUEUE FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()[0]
-        open_db.close()
-        return render_template ('qRegistrar.html', queue_number=personal_queue_number)
-    
-    max = open_db.execute("SELECT MAX(QUEUE) FROM QUEUE").fetchone()[0]
-                            
-    if max is None:
-        queue_number = 1
+    if topic is None:
+        return render_template("base.html")
+    elif topic[0] == "REGISTRAR":
+        return redirect(url_for('client.qRegistrar'))
     else:
-        queue_number = max + 1
+        return redirect(url_for('client.qCashier'))
     
-    broker.publish("REGISTRAR", {"session_id": session_id, "queue_number": queue_number, "topic": topic})    
+#CHECKS IF THE CURRENT DEVICE AS AN ACTIVE QUEUE NUMBER
+def isExisting(session_id):
+    db = sqlite3.connect(dbName)
+    cursor = db.execute('SELECT ID FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()
+    db.close()
     
-    open_db.close()
+    if cursor is None: 
+        return False
+    else:
+        return True
     
-    return render_template ('qRegistrar.html', queue_number=queue_number)
+#CLIENT GETTING IN LINE    
+def line(topic):
+    session_id = getID()
+    
+    if isExisting(session_id):
+        db = sqlite3.connect(dbName)
+        row = db.execute('SELECT QUEUE, TYPE FROM QUEUE WHERE ID  = ?', (session_id,)).fetchone()
+        q_number = row[0]
+        q_type = row[1]
+        number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (q_type,)).fetchone()[0] - 1
+        wait_time = number_infront * 3
+        db.close()
+        
+        if q_type != topic:
+            if q_type == 'REGISTRAR':
+                return redirect (url_for('client.qRegistrar'))
+            else:
+                return redirect(url_for('client.qCashier'))  
+        return q_number, number_infront, wait_time
+        
+            
+    message = {
+        'session_id': session_id,
+        'topic': topic
+    }
+    
+    broker.publish(join_queue, message)
+    flash(f"You have successfully joined the {topic} Queue!")
+    db = sqlite3.connect(dbName)
+    q_number = db.execute('SELECT QUEUE FROM QUEUE WHERE ID = ?', (session_id,)).fetchone()[0]
+    number_infront = db.execute('SELECT COUNT(ID) FROM QUEUE WHERE TYPE = ?', (topic,)).fetchone()[0] - 1
+    wait_time = number_infront * 3
+    db.close()
+    
+    return q_number, number_infront, wait_time
+    
+#LINE FOR REGISTRAR
+@client.route('/qRegistrar')
+def qRegistrar():
+    result  = line('REGISTRAR')
+    
+    if not isinstance(result, tuple):
+        return result
+    
+    return render_template('qRegistrar.html', q_number = f"{result[0]:03d}", number_infront = result[1], wait_time = result[2])
+
+#LINE FOR CASHIER
+@client.route('/qCashier')
+def qCashier():
+    result  = line('CASHIER')
+    
+    if not isinstance(result, tuple):
+        return result
+            
+    return render_template('qCashier.html', q_number = f"{result[0]:03d}", number_infront = result[1], wait_time = result[2])
 
 
+#EXIT FROM THE LINE
+@client.route('/leave')
+def leave_queue():
+    db = sqlite3.connect(dbName)
+    session_id = getID()
+    
+    print(f'MESSAGE: You have left the queue.')
+    
+    db.execute('DELETE FROM QUEUE WHERE ID = ?', (session_id,))
+    db.commit()
+    db.close()
+    
+    return redirect(url_for('client.home'))

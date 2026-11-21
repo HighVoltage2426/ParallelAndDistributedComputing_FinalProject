@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} High-Q {% endblock %}</title>
+    <title>QUEUE IT</title>
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <div class="container"> 
         {% block content %}
 
-            <form action="/qCashier" method="POST">
-                <button type="submit">
-                    Line for Cashier
-                </button>
+        <h1>Welcome to WVSU Admin</h1>
+        <p>Please select a service to join the queue.</p> <br>
+
+        <div class="join_bbtn_container">
+            <form action="/qCashier" class="join_queue_bttn">
+                <h2>Cashier</h2>
+                <p>Live - <span></span> waiting </p>
+                <button type="submit">Join Queue </button>
             </form>
 
-            <form action="/qRegistrar" method="POST">
-                <button type="submit">
-                    Line for Registrar
-                </button>
+            <form action="/qRegistrar" class="join_queue_bttn">
+                <h2>Registrar</h2>
+                <p>Live - <span></span> waiting </p>
+                <button type="submit">Join Queue</button>
             </form>
-
-            <form action="/login" method="POST">
-                <button type="submit">
-                    ADMIN LOG IN
-                </button>
-            </form>
+        </div>
         
         {% endblock %}
     </div>
