@@ -16,11 +16,9 @@ get_flashed_messages() %} {% if messages %}
 {% endif %} {% endwith %}
 
 <main>
-  <h2>Cashier Queue</h2>
-
   <section class="currently_serving">
     <table>
-      <tr>
+      <tr class="table-title">
         <th>Window</th>
         <th>Status</th>
         <th>Customer</th>
