@@ -1,33 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QUEUE IT</title>
-    <link rel="stylesheet" href="../static/styles.css">
-</head>
-<body>
-    <div class="container"> 
-        {% block content %}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Karla:ital,wght@0,200..800;1,200..800&family=League+Spartan:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      {% block content %}
 
-        <h1>Welcome to WVSU Admin</h1>
-        <p>Please select a service to join the queue.</p> <br>
+      <h1>Welcome to WVSU Admin</h1>
+      <p>Please select a service to join the queue.</p>
+      <br />
 
-        <div class="join_bbtn_container">
-            <form action="/qCashier" class="join_queue_bttn">
-                <h2>Cashier</h2>
-                <p>Live - <span>{{cashier_wait_count}}</span> waiting </p>
-                <button type="submit">Join Queue </button>
-            </form>
+      <div class="join_bbtn_container">
+        <form action="/qCashier" class="join_queue_bttn">
+          <h2>Cashier</h2>
+          <p>Live - <span>{{cashier_wait_count}}</span> waiting</p>
+          <button type="submit">Join Queue</button>
+        </form>
 
-            <form action="/qRegistrar" class="join_queue_bttn">
-                <h2>Registrar</h2>
-                <p>Live - <span>{{registrar_wait_count}}</span> waiting </p>
-                <button type="submit">Join Queue</button>
-            </form>
-        </div>
-        
-        {% endblock %}
+        <form action="/qRegistrar" class="join_queue_bttn">
+          <h2>Registrar</h2>
+          <p>Live - <span>{{registrar_wait_count}}</span> waiting</p>
+          <button type="submit">Join Queue</button>
+        </form>
+      </div>
+
+      {% endblock %}
     </div>
-</body>
+  </body>
 </html>
