@@ -1,165 +1,202 @@
-{% extends "base.html" %}
-{%block content%}
+{% extends "base.html" %} {%block content%} {% with messages =
+get_flashed_messages() %} {% if messages %}
+<dialog id="success_modal">
+  <h2>Success!</h2>
+  <p>{{ messages[0] }}</p>
+  <button
+    type="button"
+    onclick="document.getElementById('success_modal').close()"
+  >
+    Got it
+  </button>
+</dialog>
+<script>
+  document.getElementById("success_modal").showModal();
+</script>
+{% endif %} {% endwith %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <dialog id="success_modal">
-                <h2>Success!</h2>
-                <p>{{ messages[0] }}</p>
-                <button type="button" onclick="document.getElementById('success_modal').close()">Got it</button>
-            </dialog>
-            <script>
-                document.getElementById('success_modal').showModal();
-            </script>
-        {% endif %}
-    {% endwith %}
-    
-    <main>
-        <h2>Cashier Queue</h2>
+<main>
+  <section class="currently_serving">
+    <table>
+      <tr class="table-title">
+        <th>Window</th>
+        <th>Status</th>
+        <th>Customer</th>
+      </tr>
+      {% for win_num in [1, 2, 3] %} {% set info = windows[win_num] %}
+      <tr>
+        <td>Window {{ win_num }}</td>
+        <td id="status_{{ win_num }}">{{ info.status | upper }}</td>
+        <td id="serving_{{ win_num }}">
+          {% if info.serving %} CASH-{{ "%03d"|format(info.serving) }} {% else
+          %} None {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
 
-        <section class="currently_serving">
-            <table>
-                <tr>
-                    <th>Window</th>
-                    <th>Status</th>
-                    <th>Customer</th>
-                </tr>
-                {% for win_num in [1, 2, 3] %}
-                {% set info = windows[win_num] %}
-                <tr>
-                    <td>Window {{ win_num }}</td>
-                    <td id="status_{{ win_num }}">{{ info.status | upper }}</td>
-                    <td id="serving_{{ win_num }}">
-                        {% if info.serving %}
-                            CASH-{{ "%03d"|format(info.serving) }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </section>
+  <section class="number">
+    <h4>Your Number</h4>
+    <p class="q_number">CASH-{{ q_number }}</p>
+  </section>
 
-        <section>
-            <p>Your Number</p>
-            <p class = "q_number"> CASH-{{ q_number }} </p>
-        </section>
+  <section class="q_status">
+    <div class="number_infront">
+      <p class="status_title">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+          />
+        </svg>
+        People ahead of you
+      </p>
+      <h4><strong id="number_infront">{{ number_infront }}</strong></h4>
+    </div>
 
-        <section>
-            <div class="number_infront">
-                <p> People ahead of you </p>
-                <p> <strong id="number_infront">{{ number_infront }}</strong></p>
-            </div>
+    <div class="wait_time">
+      <p class="status_title">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+        Estimated Wait Time
+      </p>
+      <h4><strong id="wait_time">{{ wait_time }}</strong></h4>
+    </div>
+  </section>
 
-            <div class="wait_time">
-                <p> Estimated Wait Time </p>
-                <p> <strong id="wait_time">{{ wait_time }}</strong></p>
-            </div>
-        </section>
-        
-        <button commandFor="leave_warning" command="show-modal">Leave Queue</button>
-    </main>
-    
-    <dialog id="leave_warning">
-        <h2>Leave the Queue?</h2>
-        <p> You will lose your current sport in line and will need to get a new ticket later. </p>
-        <button commandFor="leave_warning" command="close"> Keep Spot </button>
-        <form action="/leave">
-            <button>Leave Queue</button>
-        </form>
-    </dialog>
+  <button class="leave_button" commandfor="leave_warning" command="show-modal">
+    Leave Queue
+  </button>
+</main>
 
-    <dialog id="queue_alert_modal">
-        <h2 id="queue_alert_title">Queue Notification</h2>
-        <p id="queue_alert_message"></p>
-        <button type="button" id="queue_alert_got_it">Got It</button>
-    </dialog>
+<dialog id="leave_warning">
+  <h2>Leave the Queue?</h2>
+  <p>
+    You will lose your current sport in line and will need to get a new ticket
+    later.
+  </p>
+  <button commandfor="leave_warning" command="close">Keep Spot</button>
+  <form action="/leave">
+    <button>Leave Queue</button>
+  </form>
+</dialog>
 
-    <script>
-        const alertModal = document.getElementById("queue_alert_modal");
-        const alertTitle = document.getElementById("queue_alert_title");
-        const alertMessage = document.getElementById("queue_alert_message");
-        const gotItBtn = document.getElementById("queue_alert_got_it");
+<dialog id="queue_alert_modal">
+  <h2 id="queue_alert_title">Queue Notification</h2>
+  <p id="queue_alert_message"></p>
+  <button type="button" id="queue_alert_got_it">Got It</button>
+</dialog>
 
-        let notifiedUnderFive = false;
-        let notifiedNextInLine = false;
-        let hasRedirected = false;
+<script>
+  const alertModal = document.getElementById("queue_alert_modal");
+  const alertTitle = document.getElementById("queue_alert_title");
+  const alertMessage = document.getElementById("queue_alert_message");
+  const gotItBtn = document.getElementById("queue_alert_got_it");
 
-        function showQueueAlert(title, message) {
-            alertTitle.textContent = title;
-            alertMessage.textContent = message;
-            if (!alertModal.open) {
-                alertModal.showModal();
-            }
+  let notifiedUnderFive = false;
+  let notifiedNextInLine = false;
+  let hasRedirected = false;
+
+  function showQueueAlert(title, message) {
+    alertTitle.textContent = title;
+    alertMessage.textContent = message;
+    if (!alertModal.open) {
+      alertModal.showModal();
+    }
+  }
+
+  gotItBtn.addEventListener("click", () => {
+    alertModal.close();
+  });
+
+  setInterval(async () => {
+    const res = await fetch("{{ url_for('client.subscriber_status') }}");
+    if (!res.ok) return;
+    const data = await res.json();
+
+    let servingWindow = null;
+
+    if (data.windows) {
+      for (const win of [1, 2, 3]) {
+        const info = data.windows[win];
+        if (!info) continue;
+        document.getElementById(`status_${win}`).textContent =
+          info.status.toUpperCase();
+        document.getElementById(`serving_${win}`).textContent = info.serving
+          ? `CASH-${String(info.serving).padStart(3, "0")}`
+          : "None";
+
+        if (
+          data.my_q_number !== undefined &&
+          info.serving === data.my_q_number
+        ) {
+          servingWindow = win;
         }
+      }
+    }
 
-        gotItBtn.addEventListener("click", () => {
-            alertModal.close();
-        });
+    if (data.number_infront !== undefined) {
+      document.getElementById("number_infront").textContent =
+        data.number_infront;
+    }
+    if (data.wait_time !== undefined) {
+      document.getElementById("wait_time").textContent = data.wait_time;
+    }
 
-        setInterval(async () => {
-            const res = await fetch("{{ url_for('client.subscriber_status') }}");
-            if (!res.ok) return;
-            const data = await res.json();
+    // 3. Exact turn check -> automatically redirect to the turn page
+    if (servingWindow !== null) {
+      if (!hasRedirected) {
+        hasRedirected = true;
+        window.location.href = "{{ url_for('client.your_turn') }}";
+      }
+      return;
+    }
 
-            let servingWindow = null;
+    // 2. Next in line (top of queue, 0 people ahead)
+    if (data.number_infront === 0) {
+      if (!notifiedNextInLine) {
+        notifiedNextInLine = true;
+        notifiedUnderFive = true;
+        showQueueAlert(
+          "You Are Next in Line!",
+          "You are at the very top of the queue. Please get ready.",
+        );
+      }
+      return;
+    }
 
-            if (data.windows) {
-                for (const win of [1, 2, 3]) {
-                    const info = data.windows[win];
-                    if (!info) continue;
-                    document.getElementById(`status_${win}`).textContent = info.status.toUpperCase();
-                    document.getElementById(`serving_${win}`).textContent = info.serving
-                        ? `CASH-${String(info.serving).padStart(3, "0")}`
-                        : "None";
+    // 1. Fewer than 5 people ahead
+    if (data.number_infront !== undefined && data.number_infront < 5) {
+      if (!notifiedUnderFive) {
+        notifiedUnderFive = true;
+        showQueueAlert(
+          "Almost Your Turn",
+          `There are only ${data.number_infront} person(s) ahead of you in line.`,
+        );
+      }
+    }
+  }, 2000);
+</script>
 
-                    if (data.my_q_number !== undefined && info.serving === data.my_q_number) {
-                        servingWindow = win;
-                    }
-                }
-            }
-
-            if (data.number_infront !== undefined) {
-                document.getElementById("number_infront").textContent = data.number_infront;
-            }
-            if (data.wait_time !== undefined) {
-                document.getElementById("wait_time").textContent = data.wait_time;
-            }
-
-            // 3. Exact turn check -> automatically redirect to the turn page
-            if (servingWindow !== null) {
-                if (!hasRedirected) {
-                    hasRedirected = true;
-                    window.location.href = "{{ url_for('client.your_turn') }}";
-                }
-                return;
-            }
-
-            // 2. Next in line (top of queue, 0 people ahead)
-            if (data.number_infront === 0) {
-                if (!notifiedNextInLine) {
-                    notifiedNextInLine = true;
-                    notifiedUnderFive = true;
-                    showQueueAlert(
-                        "You Are Next in Line!",
-                        "You are at the very top of the queue. Please get ready."
-                    );
-                }
-                return;
-            }
-
-            // 1. Fewer than 5 people ahead
-            if (data.number_infront !== undefined && data.number_infront < 5) {
-                if (!notifiedUnderFive) {
-                    notifiedUnderFive = true;
-                    showQueueAlert(
-                        "Almost Your Turn",
-                        `There are only ${data.number_infront} person(s) ahead of you in line.`
-                    );
-                }
-            }
-        }, 2000);
-    </script>
-    
 {%endblock%}
