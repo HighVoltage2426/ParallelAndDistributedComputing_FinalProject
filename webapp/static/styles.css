@@ -266,9 +266,22 @@ table {
 
 /*for qCashier.html and qRegistrar.html*/
 
+.number {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background-color: var(--foundation----blue---light);
+  color: var(--foundation----blue---dark);
+  padding: 24px;
+  gap: 4px;
+}
+
 .q_number {
-  font-size: 3em;
+  font-size: 3rem;
   margin: 0;
+  font-weight: bold;
 }
 
 .number_infront,
