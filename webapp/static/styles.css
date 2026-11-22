@@ -1,5 +1,5 @@
 :root {
-  /* Color Styles */
+  /* Blue Foundation */
   --foundation----blue---light: rgba(230, 241, 248, 1);
   --foundation----blue---light-hover: rgba(217, 234, 245, 1);
   --foundation----blue---light-active: rgba(176, 212, 235, 1);
@@ -10,16 +10,20 @@
   --foundation----blue---dark-hover: rgba(0, 70, 113, 1);
   --foundation----blue---dark-active: rgba(0, 52, 85, 1);
   --foundation----blue---darker: rgba(0, 41, 66, 1);
-  --foundation----blue---light: rgba(255, 255, 255, 1);
-  --foundation----blue---light-hover: rgba(255, 255, 255, 1);
-  --foundation----blue---light-active: rgba(254, 254, 254, 1);
-  --foundation----blue---normal: rgba(252, 252, 253, 1);
-  --foundation----blue---normal-hover: rgba(227, 227, 228, 1);
-  --foundation----blue---normal-active: rgba(202, 202, 202, 1);
-  --foundation----blue---dark: rgba(189, 189, 190, 1);
-  --foundation----blue---dark-hover: rgba(151, 151, 152, 1);
-  --foundation----blue---dark-active: rgba(113, 113, 114, 1);
-  --foundation----blue---darker: rgba(88, 88, 89, 1);
+
+  /* White / Neutral Foundation */
+  --foundation----white---light: rgba(255, 255, 255, 1);
+  --foundation----white---light-hover: rgba(255, 255, 255, 1);
+  --foundation----white---light-active: rgba(254, 254, 254, 1);
+  --foundation----white---normal: rgba(252, 252, 253, 1);
+  --foundation----white---normal-hover: rgba(227, 227, 228, 1);
+  --foundation----white---normal-active: rgba(202, 202, 202, 1);
+  --foundation----white---dark: rgba(189, 189, 190, 1);
+  --foundation----white---dark-hover: rgba(151, 151, 152, 1);
+  --foundation----white---dark-active: rgba(113, 113, 114, 1);
+  --foundation----white---darker: rgba(88, 88, 89, 1);
+
+  /* Black Foundation */
   --foundation----black---light: rgba(230, 230, 230, 1);
   --foundation----black---light-hover: rgba(217, 217, 217, 1);
   --foundation----black---light-active: rgba(176, 176, 176, 1);
@@ -30,152 +34,6 @@
   --foundation----black---dark-hover: rgba(0, 0, 0, 1);
   --foundation----black---dark-active: rgba(0, 0, 0, 1);
   --foundation----black---darker: rgba(0, 0, 0, 1);
-
-  /* Text Styles */
-  --font-family-desktop-42dot-sans-hero-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-bold: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-bold: 700;
-  --font-family-desktop-42dot-sans-hero-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-extrabold: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-extrabold: 700;
-  --font-family-desktop-42dot-sans-hero-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-light: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-light: 300;
-  --font-family-desktop-42dot-sans-hero-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-medium: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-medium: 500;
-  --font-family-desktop-42dot-sans-hero-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-regular: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-regular: 400;
-  --font-family-desktop-42dot-sans-hero-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-semibold: 57pxpx;
-  --font-weight-desktop-42dot-sans-hero-semibold: 600;
-  --font-family-desktop-42dot-sans-hero-2-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-bold: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-bold: 700;
-  --font-family-desktop-42dot-sans-hero-2-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-extrabold: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-extrabold: 700;
-  --font-family-desktop-42dot-sans-hero-2-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-light: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-light: 300;
-  --font-family-desktop-42dot-sans-hero-2-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-medium: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-medium: 500;
-  --font-family-desktop-42dot-sans-hero-2-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-regular: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-regular: 400;
-  --font-family-desktop-42dot-sans-hero-2-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-2-semibold: 48pxpx;
-  --font-weight-desktop-42dot-sans-hero-2-semibold: 600;
-  --font-family-desktop-42dot-sans-hero-3-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-bold: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-bold: 700;
-  --font-family-desktop-42dot-sans-hero-3-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-extrabold: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-extrabold: 700;
-  --font-family-desktop-42dot-sans-hero-3-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-light: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-light: 300;
-  --font-family-desktop-42dot-sans-hero-3-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-medium: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-medium: 500;
-  --font-family-desktop-42dot-sans-hero-3-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-regular: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-regular: 400;
-  --font-family-desktop-42dot-sans-hero-3-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-hero-3-semibold: 40pxpx;
-  --font-weight-desktop-42dot-sans-hero-3-semibold: 600;
-  --font-family-desktop-42dot-sans-h1-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-bold: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-bold: 700;
-  --font-family-desktop-42dot-sans-h1-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-extrabold: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-extrabold: 700;
-  --font-family-desktop-42dot-sans-h1-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-light: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-light: 300;
-  --font-family-desktop-42dot-sans-h1-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-medium: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-medium: 500;
-  --font-family-desktop-42dot-sans-h1-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-regular: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-regular: 400;
-  --font-family-desktop-42dot-sans-h1-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h1-semibold: 33pxpx;
-  --font-weight-desktop-42dot-sans-h1-semibold: 600;
-  --font-family-desktop-42dot-sans-h2-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-bold: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-bold: 700;
-  --font-family-desktop-42dot-sans-h2-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-extrabold: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-extrabold: 700;
-  --font-family-desktop-42dot-sans-h2-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-light: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-light: 300;
-  --font-family-desktop-42dot-sans-h2-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-medium: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-medium: 500;
-  --font-family-desktop-42dot-sans-h2-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-regular: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-regular: 400;
-  --font-family-desktop-42dot-sans-h2-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h2-semibold: 28pxpx;
-  --font-weight-desktop-42dot-sans-h2-semibold: 600;
-  --font-family-desktop-42dot-sans-h3-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-bold: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-bold: 700;
-  --font-family-desktop-42dot-sans-h3-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-extrabold: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-extrabold: 700;
-  --font-family-desktop-42dot-sans-h3-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-light: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-light: 300;
-  --font-family-desktop-42dot-sans-h3-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-medium: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-medium: 500;
-  --font-family-desktop-42dot-sans-h3-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-regular: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-regular: 400;
-  --font-family-desktop-42dot-sans-h3-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h3-semibold: 23pxpx;
-  --font-weight-desktop-42dot-sans-h3-semibold: 600;
-  --font-family-desktop-42dot-sans-h4-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-bold: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-bold: 700;
-  --font-family-desktop-42dot-sans-h4-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-extrabold: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-extrabold: 700;
-  --font-family-desktop-42dot-sans-h4-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-light: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-light: 300;
-  --font-family-desktop-42dot-sans-h4-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-medium: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-medium: 500;
-  --font-family-desktop-42dot-sans-h4-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-regular: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-regular: 400;
-  --font-family-desktop-42dot-sans-h4-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-h4-semibold: 19pxpx;
-  --font-weight-desktop-42dot-sans-h4-semibold: 600;
-  --font-family-desktop-42dot-sans-p1-bold: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-bold: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-bold: 700;
-  --font-family-desktop-42dot-sans-p1-extrabold: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-extrabold: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-extrabold: 700;
-  --font-family-desktop-42dot-sans-p1-light: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-light: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-light: 300;
-  --font-family-desktop-42dot-sans-p1-medium: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-medium: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-medium: 500;
-  --font-family-desktop-42dot-sans-p1-regular: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-regular: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-regular: 400;
-  --font-family-desktop-42dot-sans-p1-semibold: "42dot Sans";
-  --font-size-desktop-42dot-sans-p1-semibold: 16pxpx;
-  --font-weight-desktop-42dot-sans-p1-semibold: 600;
 
   /* Grid Styles */
   --grid-desktop-margin: display: grid;
@@ -195,6 +53,14 @@ body {
   text-align: center;
 }
 
+h2 {
+  font-size: 28px;
+}
+
+p {
+  font-size: 16px;
+}
+
 section {
   margin: 20px 0;
 }
@@ -207,10 +73,28 @@ section {
 }
 
 .join_queue_bttn {
-  text-align: left;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  flex: 1;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 62px;
+  border: none;
+  color: var(--foundation----white---light);
+  background: var(--foundation----blue---normal);
+  cursor: pointer;
+  font-family: "Asta Sans", sans-serif;
+}
+
+.join_queue_bttn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--foundation----white---light);
 }
 
 /*general*/
