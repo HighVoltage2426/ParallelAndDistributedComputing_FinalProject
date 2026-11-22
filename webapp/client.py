@@ -232,6 +232,7 @@ def qRegistrar():
 
     return render_template(
         'qRegistrar.html',
+        header_title="Registrar Queue",
         q_number=f"{result[0]:03d}",
         number_infront=result[1],
         wait_time=result[2],
@@ -249,6 +250,7 @@ def qCashier():
 
     return render_template(
         'qCashier.html',
+        header_title="Cashier Queue",
         q_number=f"{result[0]:03d}",
         number_infront=result[1],
         wait_time=result[2],
