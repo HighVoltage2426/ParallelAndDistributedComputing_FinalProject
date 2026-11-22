@@ -284,10 +284,31 @@ table {
   font-weight: bold;
 }
 
+.q_status {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 12px;
+}
+
 .number_infront,
 .wait_time {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.status_title {
+  display: flex;
+  align-items: center;
+  color: var(--foundation----white---dark-active);
+  gap: 8px;
+}
+
+.status_title svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 /*for cashierControl.html*/
