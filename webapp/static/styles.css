@@ -59,7 +59,7 @@ body {
   font-family: "Asta Sans", sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center; /* centers child elements (like .container) horizontally */
+  align-items: center;
   min-height: 100vh;
 }
 
@@ -69,6 +69,18 @@ header {
   color: var(--foundation----blue---normal);
   box-shadow: var(--shadow-header);
   text-align: center;
+}
+
+.top-header__title {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--foundation----blue---normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .container {
