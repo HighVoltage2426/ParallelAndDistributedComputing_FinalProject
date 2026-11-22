@@ -42,37 +42,88 @@
   --grid-mobile-margin: display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+
+  --shadow-card: 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+  --shadow-header: 0 1px 6px 0 rgba(0, 0, 0, 0.12);
+}
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  margin: 0;
   padding: 0;
-  margin: 0 5px;
-  font-family: "42dot Sans", sans-serif;
+  font-family: "Asta Sans", sans-serif;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center; /* centers child elements (like .container) horizontally */
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  padding: 10px;
+  color: var(--foundation----blue---normal);
+  box-shadow: var(--shadow-header);
   text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 96%;
+  min-width: 320px;
+  max-width: 1200px;
+  text-align: left;
+  gap: 20px;
+  padding: 24px 16px;
+  box-sizing: border-box;
 }
 
 h2 {
   font-size: 28px;
+  margin: 0;
+}
+
+h3 {
+  font-size: 23px;
+  margin: 0;
+  font-weight: 1000;
+}
+
+h4 {
+  font-size: 19px;
+  margin: 0;
+  font-weight: 800;
 }
 
 p {
   font-size: 16px;
+  margin: 0;
 }
 
 section {
   margin: 20px 0;
 }
 
+.base_title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 /* from base.html*/
 .join_bbtn_container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
 }
 
 .join_queue_bttn {
+  align-self: center;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -81,13 +132,21 @@ section {
   flex: 1;
   flex-direction: row;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 24px;
   border-radius: 62px;
   border: none;
   color: var(--foundation----white---light);
   background: var(--foundation----blue---normal);
   cursor: pointer;
   font-family: "Asta Sans", sans-serif;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.join_queue_bttn:hover {
+  transform: scale(1.05);
+  background: var(--foundation----blue---normal-hover);
 }
 
 .join_queue_bttn svg {
@@ -95,6 +154,63 @@ section {
   height: 20px;
   flex-shrink: 0;
   color: var(--foundation----white---light);
+}
+
+.selection-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 96%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.selection-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.info-card-column {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-radius: 8px;
+}
+
+.live-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans); /* or your active font variable */
+}
+
+.live-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00e639;
+  flex-shrink: 0;
+}
+
+.card-title-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selection-card > svg,
+.selection-card > img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: auto;
+  pointer-events: none;
 }
 
 /*general*/
@@ -192,4 +308,18 @@ table {
   background-color: #4caf50;
   color: white;
   border-color: #4caf50;
+}
+
+@media (min-width: 620px) {
+  .join_bbtn_container {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 619px) {
+  .join_bbtn_container {
+    display: flex;
+    flex-direction: column;
+  }
 }
