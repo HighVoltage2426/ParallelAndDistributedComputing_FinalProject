@@ -311,6 +311,23 @@ table {
   flex-shrink: 0;
 }
 
+.leave_button {
+  font-size: 16px;
+  font-family: "Asta Sans", sans-serif;
+  font-weight: 600;
+  padding: 8px 16px;
+  color: red;
+  border-radius: 64px;
+  border: 1px solid red;
+  background-color: var(--foundation----white---light);
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.leave_button:hover {
+  transform: scale(1.05);
+}
+
 /*for cashierControl.html*/
 
 .heading-right {

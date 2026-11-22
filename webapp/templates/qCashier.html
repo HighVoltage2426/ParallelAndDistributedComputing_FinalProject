@@ -85,7 +85,9 @@ get_flashed_messages() %} {% if messages %}
     </div>
   </section>
 
-  <button commandfor="leave_warning" command="show-modal">Leave Queue</button>
+  <button class="leave_button" commandfor="leave_warning" command="show-modal">
+    Leave Queue
+  </button>
 </main>
 
 <dialog id="leave_warning">
