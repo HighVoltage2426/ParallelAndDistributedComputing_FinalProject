@@ -43,39 +43,20 @@
  
                 </form>
             </div>
-            
-
-        </section>
-    
-        <section class="informations">
-            <div class="waiting">
-                <h3>WAITING</h3>
-                <p id="cashier_waiting">{{ total_waiting }}</p>
-            </div>
-        
-            <div class="completed">
-                <h3>SERVED TODAY</h3>
-                <p id="cashier_completed">{{ total_completed }}</p>
-            </div>
-    
-            <div class="avg_wait">
-                <h3>AVERAGE WAIT TIME</h3>
-                <p id="cashier_avg_wait">{{ total_completed }}</p>
-            </div>
-    
-            <div class="avg_service">
-                <h3>AVERAGE SERVICE TIME</h3>
-                <p id="cashier_avg_service">{{ average_service }}</p>
-            </div>
-        </section>
-    
-        <section class="now_serving">
-            <p>NOW SERVING</p>
-            <p class="q_number" id="cashier_now_serving">{%if current_client is none%}READY FOR SERVICE...{%else%} {{"CASH-"~"%03d"|format(current_client) }}{%endif%}</p>
-            
-            <div class="now_serving_bttn">
-                <form action="/next", method="POST">
-                    <button type="submitted" {%if window_status != 'open'%}disabled{%endif%}> NEXT </button>
+ 
+            <div class="dashboard__user">
+                <div class="dashboard__avatar" aria-hidden="true">CS</div>
+                <div class="dashboard__user-text">
+                    <p class="dashboard__user-role">Cashier</p>
+                    <p class="dashboard__user-meta">Window {{ window }}</p>
+                </div>
+ 
+                <!-- Logout Form Action-->
+                <form class="dashboard__logout" method="post" action="{{ url_for('auth.logout') }}">
+                    <button type="submit">
+                        {% include "icons/logout.html" %}
+                        Log out
+                    </button>
                 </form>
             </div>
  
