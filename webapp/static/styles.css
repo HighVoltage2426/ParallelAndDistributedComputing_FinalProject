@@ -197,6 +197,52 @@ section {
     background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+form {
+  width: 100%;
+}
+
+.cancel_button {
+  outline: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  text-align: center;
+  align-self: center;
+  align-content: center;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 24px;
+  border-radius: 62px;
+  border: none;
+  cursor: pointer;
+  font-family: "Asta Sans", sans-serif;
+  color: var(--foundation----white---dark-active);
+  background: var(--foundation----white---light);
+  border: 1px solid var(--foundation----white---dark-active);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cancel_button:hover {
+  transform: scale(1.05);
+  color: var(--foundation----white---dark-active);
+  background: var(--foundation----white---light);
+  border: 1px solid var(--foundation----white---dark-active);
+}
+
+.button_group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .join_queue_bttn:hover,
 .no_icon_button:hover {
   transform: scale(1.05);
