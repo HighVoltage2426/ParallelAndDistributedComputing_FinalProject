@@ -744,6 +744,7 @@ body:has(.dashboard) .container {
   font-size: 1rem;
   font-weight: 400;
   color: var(--foundation----black---light-active);
+  white-space: nowrap;
 }
 
 .dashboard .dashboard__logout {

@@ -65,7 +65,7 @@
         <div class="dashboard__body">
  
             <!-- stat cards -->
-            <section class="dashboard__stats informations">
+            <section class="dashboard__stats">
                 <div class="dashboard__stat waiting">
                     <h3>WAITING</h3>
                     <p class="dashboard__stat-value" id="registrar_waiting">{{ total_waiting }}</p>
@@ -74,11 +74,6 @@
                 <div class="dashboard__stat completed">
                     <h3>SERVED TODAY</h3>
                     <p class="dashboard__stat-value" id="registrar_completed">{{ total_completed }}</p>
-                </div>
- 
-                <div class="dashboard__stat avg_wait">
-                    <h3>AVG. WAITING</h3>
-                    <p class="dashboard__stat-value"><span id="registrar_avg_wait">{{ total_completed }}</span><span class="dashboard__stat-unit">MIN.</span></p>
                 </div>
  
                 <div class="dashboard__stat avg_service">
@@ -137,7 +132,6 @@
 
         document.getElementById("registrar_waiting").textContent = data.total_waiting;
         document.getElementById("registrar_completed").textContent = data.total_completed;
-        document.getElementById("registrar_avg_wait").textContent = data.total_completed;
         document.getElementById("registrar_avg_service").textContent = data.average_service;
 
         document.getElementById("registrar_now_serving").textContent =

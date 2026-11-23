@@ -65,7 +65,7 @@
         <div class="dashboard__body">
  
             <!-- stat cards -->
-            <section class="dashboard__stats informations">
+            <section class="dashboard__stats">
                 <div class="dashboard__stat waiting">
                     <h3>WAITING</h3>
                     <p class="dashboard__stat-value" id="cashier_waiting">{{ total_waiting }}</p>
@@ -75,18 +75,13 @@
                     <h3>SERVED TODAY</h3>
                     <p class="dashboard__stat-value" id="cashier_completed">{{ total_completed }}</p>
                 </div>
- 
-                <div class="dashboard__stat avg_wait">
-                    <h3>AVG. WAITING</h3>
-                    <p class="dashboard__stat-value"><span id="cashier_avg_wait">{{ total_completed }}</span><span class="dashboard__stat-unit">MIN.</span></p>
-                </div>
- 
+
                 <div class="dashboard__stat avg_service">
                     <h3>AVG. SERVICE TIME</h3>
                     <p class="dashboard__stat-value"><span id="cashier_avg_service">{{ total_completed }}</span><span class="dashboard__stat-unit">MIN.</span></p>
                 </div>
             </section>
- 
+
             <div class="dashboard__main">
  
                 <!-- Currently serving -->
@@ -137,9 +132,7 @@
 
         document.getElementById("cashier_waiting").textContent = data.total_waiting;
         document.getElementById("cashier_completed").textContent = data.total_completed;
-        document.getElementById("cashier_avg_wait").textContent = data.total_completed;
-        document.getElementById("cashier_avg_service").textContent = data.average_service;
-
+document.getElementById("cashier_avg_service").textContent = parseFloat(data.average_service) || 0;
         document.getElementById("cashier_now_serving").textContent =
             data.current_client !== null && data.current_client !== undefined
                 ? `CASH-${String(data.current_client).padStart(3, "0")}`
