@@ -590,17 +590,24 @@ body:has(.dashboard) .container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;   /* was space-between */
   gap: 24px;
-  padding: 24px 41px;
+  width: 100%;
+  min-height: 148px;
+  margin: 0;
+  padding: 24px 40px;
+  border-radius: 0;
+  box-shadow: none;
   background-color: var(--foundation----white---light);
 }
+
+.dashboard .dashboard__title { margin-left: 16px; }
 
 .dashboard .dashboard__brand {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-right: 40px;
+  padding-right: 28px;
   border-right: 1px solid var(--foundation----white---normal-hover);
   color: var(--foundation----blue---normal);
 }
@@ -631,12 +638,12 @@ body:has(.dashboard) .container {
 /* window status: open, break, close buttons */
 
 .dashboard .dashboard__status {
-  margin: 0;
+  margin: 0 0 0 auto;
 }
 
 .dashboard .dashboard__status .radio-buttons {
   display: flex;
-  gap: 8px;
+  gap: 15px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -705,7 +712,7 @@ body:has(.dashboard) .container {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-left: 40px;
+  padding-left: 22px;
   border-left: 1px solid var(--foundation----white---normal-hover);
 }
 
@@ -778,25 +785,25 @@ body:has(.dashboard) .container {
 .dashboard .dashboard__body {
   display: flex;
   flex-direction: column;
-  gap: 36px;
-  width: 100%;
-  margin: 0;
-  padding: 48px 87px;
+  gap: 12px;
+  width: min(74%, 1200px);
+  margin: 0 auto;
+  padding: 24px 0 48px;
 }
 
 /* stat cards */
 
 .dashboard .dashboard__stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 61px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .dashboard .dashboard__stat {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  width: 100%;
   min-height: 160px;
   padding: 24px;
   border-radius: var(--dash-radius-card);
@@ -804,9 +811,9 @@ body:has(.dashboard) .container {
 }
 
 .dashboard .dashboard__stat h3 {
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 2;
 }
 
 .dashboard .dashboard__stat-value {
@@ -828,8 +835,8 @@ body:has(.dashboard) .container {
 
 .dashboard .dashboard__main {
   display: grid;
-  grid-template-columns: minmax(0, 465fr) minmax(0, 700fr);
-  gap: 61px;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr);
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -839,7 +846,7 @@ body:has(.dashboard) .container {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  min-height: 373px;
+  min-height: 356px;
   padding: 32px 24px;
   border-radius: var(--dash-radius-card);
   background-color: var(--foundation----white---light);
@@ -852,6 +859,7 @@ body:has(.dashboard) .container {
 }
 
 .dashboard .dashboard__ticket {
+  white-space: pre-line;
   font-size: 3.5rem;
   font-weight: 700;
   line-height: 1.1;
@@ -935,4 +943,8 @@ body:has(.dashboard) .container {
 
 .dashboard .dashboard__queue tbody tr:last-child td {
   border-bottom: none;
+}
+
+@media (max-width: 1000px) {
+  .dashboard .dashboard__body { width: calc(100% - 32px); }
 }
