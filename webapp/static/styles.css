@@ -96,11 +96,13 @@ header {
 }
 
 main {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   gap: 24px;
+  max-width: 860px;
 }
 
 h2 {
@@ -143,7 +145,10 @@ section {
 }
 
 .join_queue_bttn {
+  box-sizing: border-box;
+  text-align: center;
   align-self: center;
+  align-content: center;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -164,7 +169,34 @@ section {
     background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.join_queue_bttn:hover {
+.no_icon_button {
+  text-decoration: none;
+  box-sizing: border-box;
+  text-align: center;
+  align-self: center;
+  align-content: center;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 24px;
+  border-radius: 62px;
+  border: none;
+  color: var(--foundation----white---light);
+  background: var(--foundation----blue---normal);
+  cursor: pointer;
+  font-family: "Asta Sans", sans-serif;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.join_queue_bttn:hover,
+.no_icon_button:hover {
   transform: scale(1.05);
   background: var(--foundation----blue---normal-hover);
 }
@@ -278,6 +310,18 @@ table {
   gap: 4px;
 }
 
+.ticket_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background-color: var(--foundation----blue---light);
+  color: var(--foundation----blue---dark);
+  padding: 12px;
+  gap: 4px;
+}
+
 .q_number {
   font-size: 3rem;
   margin: 0;
@@ -341,6 +385,32 @@ table {
 
 .registrarControl {
   text-align: left;
+}
+
+/* modals */
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--foundation----white---light);
+  border: none;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 290px;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+}
+
+#success_modal button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 36px;
+  border: none;
+  background-color: var(--foundation----blue---normal);
 }
 
 .informations {
