@@ -4,36 +4,43 @@
 
 {% block content %}
 
-    <main class="cashierControl">
-
-        <section class = "heading">
-            <div class="heading_right">
-                <h1> Cashier Control - Window {{ window }}</h1>
+    <main class="dashboard cashierControl">
+ 
+        <!-- top nav bar -->
+        <div class="dashboard__topbar">
+ 
+            <div class="dashboard__brand">
+                <span class="dashboard__logo">HIGH-Q</span>
+                <span class="dashboard__logo-sub">WVSU-ADMIN</span>
+            </div>
+ 
+            <div class="dashboard__title">
+                <h1> Cashier Queue - Window {{ window }}</h1>
                 <p> {{current_date}} </p>
             </div>
-            
-            <div class="window_status">
+ 
+            <div class="dashboard__status window_status">
                 <form action="change_window_status" method="POST" id="windowStatusForm">
-
+ 
                     <ul class="radio-buttons">
-
+ 
                         <li> <input type="radio" name="window_status" id="open"  value="open"
                             {% if window_status == 'open'%}checked{% endif %}
                             onchange="this.form.submit()">
-                        <label for="open">OPEN</label> </li>
-    
+                        <label for="open">Open</label> </li>
+ 
                         <li> <input type="radio"  name="window_status" id="break" value="break" 
                             {% if window_status == 'break'%}checked{% endif %}
                             onchange="this.form.submit()">
-                        <label for="break">BREAK</label> </li>
-    
+                        <label for="break">On-Break</label> </li>
+ 
                         <li> <input type="radio" name="window_status" id="close" value="close" 
                             {% if window_status == 'close' or not window_status %}checked{% endif %}
                             onchange="this.form.submit()">
-                        <label for="close">CLOSE</label> </li>
-
+                        <label for="close">Close</label> </li>
+ 
                     </ul>
-
+ 
                 </form>
             </div>
             
@@ -71,33 +78,75 @@
                     <button type="submitted" {%if window_status != 'open'%}disabled{%endif%}> NEXT </button>
                 </form>
             </div>
-        </section>
-
-        <section class="waiting_list">
-            <table>
-                <thead>
-                    <tr> 
-                        <th>Ticket No.</th> 
-                        <th>Joined At</th>
-                    </tr>
-                </thead>
-                <tbody id="cashier_waiting_list">
-                    {% for row in waiting_list %}
-                        <tr> 
-                            <td>CASH-{{"%03d"|format(row.q_number)}}</td> 
-                            <td>{{ row.joined_at }}</td> 
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
+ 
+        </div>
+ 
+        <div class="dashboard__body">
+ 
+            <!-- stat cards -->
+            <section class="dashboard__stats informations">
+                <div class="dashboard__stat waiting">
+                    <h3>WAITING</h3>
+                    <p class="dashboard__stat-value" id="cashier_waiting">{{ total_waiting }}</p>
+                </div>
+ 
+                <div class="dashboard__stat completed">
+                    <h3>SERVED TODAY</h3>
+                    <p class="dashboard__stat-value" id="cashier_completed">{{ total_completed }}</p>
+                </div>
+ 
+                <div class="dashboard__stat avg_wait">
+                    <h3>AVG. WAITING</h3>
+                    <p class="dashboard__stat-value"><span id="cashier_avg_wait">{{ total_completed }}</span><span class="dashboard__stat-unit">MIN.</span></p>
+                </div>
+ 
+                <div class="dashboard__stat avg_service">
+                    <h3>AVG. SERVICE TIME</h3>
+                    <p class="dashboard__stat-value"><span id="cashier_avg_service">{{ total_completed }}</span><span class="dashboard__stat-unit">MIN.</span></p>
+                </div>
+            </section>
+ 
+            <div class="dashboard__main">
+ 
+                <!-- Currently serving -->
+                <section class="dashboard__serving now_serving">
+                    <p class="dashboard__serving-label">Currently Serving</p>
+                    <p class="dashboard__ticket" id="cashier_now_serving">{%if current_client is none%}READY FOR SERVICE...{%else%} {{"CASH-"~"%03d"|format(current_client) }}{%endif%}</p>
+ 
+                    <div class="dashboard__serving-action now_serving_bttn">
+                        <form action="/next" method="POST">
+                            <button type="submit" class="dashboard__next" {%if window_status != 'open'%}disabled{%endif%}>
+                                {% include "icons/check.html" %}
+                                Complete &amp; Next Customer
+                            </button>
+                        </form>
+                    </div>
+                </section>
+ 
+                <!-- waiting queue -->
+                <section class="dashboard__queue waiting_list">
+                    <table>
+                        <thead>
+                            <tr> 
+                                <th>Ticket No.</th> 
+                                <th>Joined At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cashier_waiting_list">
+                            {% for row in waiting_list %}
+                                <tr> 
+                                    <td>CASH-{{"%03d"|format(row.q_number)}}</td> 
+                                    <td>{{ row.joined_at }}</td> 
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+ 
+            </div>
+        </div>
+ 
     </main>
-    
-    <!-- Logout Form Action-->
-    <form method="post" action="{{ url_for('auth.logout') }}">
-        <button type="submit">Sign out</button>
-    </form>
 
 <script>
     setInterval(async () => {
