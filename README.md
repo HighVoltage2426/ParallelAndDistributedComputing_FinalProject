@@ -1,6 +1,11 @@
 # Queue It
 
-High Voltage's final project for Parallel & Distributed Computing. Queue It is a Flask web app prototype with separate pages for the cashier and registrar queues.
+High Voltage's final project for Parallel & Distributed Computing. Queue It is a Flask web app prototype with separate pages for the cashier and registrar queues, inspired by the West Visayas State University Administration. Group of developers include:
+1. Alido, Mary Dawn M.
+2. Bedona, Renz Clyd D.
+3. Candaganan, Gem Adrian C.
+4. Dolutan, Jose Alfonso E.
+5. Reyes, Joseph Junel V. 
 
 ## Requirements
 
@@ -25,7 +30,7 @@ pip install -r requirements.txt
 If PowerShell prevents environment activation, use the virtual environment's Python directly for both installation and running:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install Flask
+.\.venv\Scripts\python.exe -m pip install -r requirement.txt
 .\.venv\Scripts\python.exe main.py
 ```
 
