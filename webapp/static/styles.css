@@ -539,3 +539,400 @@ dialog[open] {
     flex-direction: column;
   }
 }
+
+/* admin dashboard  (cashierControl.html / registrarControl.html) */
+
+.dashboard {
+  --dash-open: #2e7d32;
+  --dash-open-hover: #25672a;
+  --dash-break: #b26a00;
+  --dash-close: #c62828;
+  --dash-radius-card: 16px;
+  --dash-radius-pill: 999px;
+  flex: 1 0 auto;
+  width: 100vw;
+  max-width: 100vw;
+  min-height: 100vh;
+  margin-left: calc(50% - 50vw);
+  margin-right: 0;
+  gap: 0;
+  align-items: stretch;
+  box-sizing: border-box;
+  text-align: left;
+  background-color: var(--foundation----black---light);
+  color: var(--foundation----black---normal);
+}
+
+.dashboard *,
+.dashboard *::before,
+.dashboard *::after {
+  box-sizing: border-box;
+}
+
+html:has(.dashboard),
+body:has(.dashboard) {
+  overflow-x: hidden;
+  background-color: var(--foundation----black---light);
+}
+
+body:has(.dashboard) > header,
+body:has(.dashboard) .container > header {
+  display: none;
+}
+
+body:has(.dashboard) .container {
+  padding-top: 0;
+  padding-bottom: 0;
+  gap: 0;
+}
+
+.dashboard .dashboard__topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 41px;
+  background-color: var(--foundation----white---light);
+}
+
+.dashboard .dashboard__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 40px;
+  border-right: 1px solid var(--foundation----white---normal-hover);
+  color: var(--foundation----blue---normal);
+}
+
+.dashboard .dashboard__logo {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+.dashboard .dashboard__logo-sub {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.dashboard .dashboard__title h1 {
+  margin: 0 0 4px;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.dashboard .dashboard__title p {
+  font-size: 1.4rem;
+}
+
+/* window status: open, break, close buttons */
+
+.dashboard .dashboard__status {
+  margin: 0;
+}
+
+.dashboard .dashboard__status .radio-buttons {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dashboard .dashboard__status .radio-buttons li {
+  position: relative;
+}
+
+.dashboard .dashboard__status .radio-buttons input[type="radio"] {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dashboard .dashboard__status .radio-buttons label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85px;
+  height: 34px;
+  border-radius: 4px;
+  background-color: var(--foundation----black---light);
+  color: var(--foundation----black---normal);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.dashboard .dashboard__status .radio-buttons input[type="radio"]:hover + label {
+  background-color: var(--foundation----black---light-hover);
+}
+
+.dashboard .dashboard__status .radio-buttons input[type="radio"]:focus-visible + label {
+  outline: 2px solid var(--foundation----blue---normal);
+  outline-offset: 2px;
+}
+
+.dashboard .dashboard__status .radio-buttons input[type="radio"]:checked + label {
+  color: var(--foundation----white---light);
+  border-color: transparent;
+}
+
+.dashboard .dashboard__status .radio-buttons li:nth-child(1) input:checked + label {
+  background-color: var(--dash-open);
+}
+
+.dashboard .dashboard__status .radio-buttons li:nth-child(2) input:checked + label {
+  background-color: var(--dash-break);
+}
+
+.dashboard .dashboard__status .radio-buttons li:nth-child(3) input:checked + label {
+  background-color: var(--dash-close);
+}
+
+/* user chip + logout */
+
+.dashboard .dashboard__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 40px;
+  border-left: 1px solid var(--foundation----white---normal-hover);
+}
+
+.dashboard .dashboard__avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--foundation----blue---light);
+  color: var(--foundation----blue---dark);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.dashboard .dashboard__user-role {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.dashboard .dashboard__user-name {
+  font-size: 1.1875rem;
+  font-weight: 500;
+}
+
+.dashboard .dashboard__user-meta {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--foundation----black---light-active);
+}
+
+.dashboard .dashboard__logout {
+  margin: 0 0 0 20px;
+}
+
+.dashboard .dashboard__logout button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--dash-close);
+  border-radius: var(--dash-radius-pill);
+  background-color: var(--foundation----white---light);
+  color: var(--dash-close);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard .dashboard__logout button:hover {
+  background-color: #fdeaea;
+}
+
+.dashboard .dashboard__logout button:focus-visible {
+  outline: 2px solid var(--dash-close);
+  outline-offset: 2px;
+}
+
+.dashboard .dashboard__logout svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* page body */
+
+.dashboard .dashboard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  width: 100%;
+  margin: 0;
+  padding: 48px 87px;
+}
+
+/* stat cards */
+
+.dashboard .dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 61px;
+}
+
+.dashboard .dashboard__stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  min-height: 160px;
+  padding: 24px;
+  border-radius: var(--dash-radius-card);
+  background-color: var(--foundation----white---light);
+}
+
+.dashboard .dashboard__stat h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.dashboard .dashboard__stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--foundation----blue---normal);
+}
+
+.dashboard .dashboard__stat-unit {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* currently serving + waiting queue */
+
+.dashboard .dashboard__main {
+  display: grid;
+  grid-template-columns: minmax(0, 465fr) minmax(0, 700fr);
+  gap: 61px;
+  align-items: stretch;
+}
+
+.dashboard .dashboard__serving {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 373px;
+  padding: 32px 24px;
+  border-radius: var(--dash-radius-card);
+  background-color: var(--foundation----white---light);
+  text-align: center;
+}
+
+.dashboard .dashboard__serving-label {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.dashboard .dashboard__ticket {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.dashboard .dashboard__serving-action {
+  display: flex;
+  justify-content: center;
+}
+
+.dashboard .dashboard__serving-action form {
+  margin: 0;
+}
+
+.dashboard .dashboard__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: var(--dash-radius-pill);
+  background-color: var(--dash-open);
+  color: var(--foundation----white---light);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard .dashboard__next svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.dashboard .dashboard__next:hover:not(:disabled) {
+  background-color: var(--dash-open-hover);
+}
+
+.dashboard .dashboard__next:focus-visible {
+  outline: 2px solid var(--dash-open);
+  outline-offset: 3px;
+}
+
+.dashboard .dashboard__next:disabled {
+  background-color: var(--foundation----white---dark);
+  cursor: not-allowed;
+}
+
+.dashboard .dashboard__queue {
+  min-width: 0;
+  max-height: 520px;
+  overflow: auto;
+  border-radius: var(--dash-radius-card);
+  background-color: var(--foundation----white---light);
+}
+
+.dashboard .dashboard__queue table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.dashboard .dashboard__queue th {
+  position: sticky;
+  top: 0;
+  padding: 16px;
+  background-color: var(--foundation----blue---light);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dashboard .dashboard__queue td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--foundation----black---light-active);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.dashboard .dashboard__queue tbody tr:last-child td {
+  border-bottom: none;
+}
