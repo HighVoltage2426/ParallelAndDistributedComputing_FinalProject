@@ -1,9 +1,13 @@
 {% extends "base.html" %} {%block content%} {% with messages =
 get_flashed_messages() %} {% if messages %}
 <dialog id="success_modal">
-  <h2>Success!</h2>
+  <div class="modal_title">
+    <img src="static/images/success.png" width="63" />
+    <h2>Success!</h2>
+  </div>
   <p>{{ messages[0] }}</p>
   <button
+    class="no_icon_button"
     type="button"
     onclick="document.getElementById('success_modal').close()"
   >
@@ -101,9 +105,14 @@ get_flashed_messages() %} {% if messages %}
 </dialog>
 
 <dialog id="queue_alert_modal">
-  <h2 id="queue_alert_title">Queue Notification</h2>
+  <div class="modal_title">
+    <img src="static/images/bell.png" width="63" />
+    <h2 id="queue_alert_title">You are Next</h2>
+  </div>
   <p id="queue_alert_message"></p>
-  <button type="button" id="queue_alert_got_it">Got It</button>
+  <button class="no_icon_button" type="button" id="queue_alert_got_it">
+    Got it, I'm on my way
+  </button>
 </dialog>
 
 <script>

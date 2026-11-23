@@ -86,7 +86,7 @@ header {
 .container {
   display: flex;
   flex-direction: column;
-  width: 96%;
+  width: 100%;
   min-width: 320px;
   max-width: 1200px;
   text-align: left;
@@ -103,6 +103,7 @@ main {
   flex-direction: column;
   gap: 24px;
   max-width: 860px;
+  width: 100%;
 }
 
 h2 {
@@ -170,6 +171,7 @@ section {
 }
 
 .no_icon_button {
+  outline: none;
   text-decoration: none;
   box-sizing: border-box;
   text-align: center;
@@ -393,6 +395,7 @@ dialog[open] {
   flex-direction: column;
   background-color: var(--foundation----white---light);
   border: none;
+  outline: none;
   border-radius: 12px;
   padding: 24px;
   max-width: 290px;
