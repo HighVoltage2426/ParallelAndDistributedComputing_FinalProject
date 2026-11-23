@@ -561,6 +561,7 @@ dialog[open] {
   text-align: left;
   background-color: var(--foundation----black---light);
   color: var(--foundation----black---normal);
+  justify-content: flex-start;
 }
 
 .dashboard *,
