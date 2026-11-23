@@ -363,6 +363,7 @@ table {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: left;
   border-radius: 12px;
   background-color: var(--foundation----blue---light);
   color: var(--foundation----blue---dark);
