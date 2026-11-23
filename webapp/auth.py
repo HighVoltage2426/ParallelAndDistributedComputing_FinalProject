@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, UTC
 import threading
 import time
 from zoneinfo import ZoneInfo
@@ -47,7 +47,39 @@ def execute_with_retry(query_builder, retries=2, delay=0.15):
             time.sleep(delay)
 
 
-# HELPER: Build and publish queue status for a topic to all subscribers
+def _parse_iso_ts(ts):
+    if not ts:
+        return None
+    dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return dt
+
+#average service time per topic
+DEFAULT_SERVICE_SECONDS = 180.0
+def avg_service_seconds(topic):
+    rows = execute_with_retry(
+        supabase.table(COMPLETED_TABLE)
+        .select('started_at, completed_at')
+        .eq('topic', topic)
+    )
+
+    durations = []
+    for row in rows.data or []:
+        start = _parse_iso_ts(row.get('started_at'))
+        end = _parse_iso_ts(row.get('completed_at'))
+        if start and end:
+            diff = (end - start).total_seconds()
+            if diff >= 0:
+                durations.append(diff)
+
+    if not durations:
+        return DEFAULT_SERVICE_SECONDS
+
+    return sum(durations) / len(durations)
+
+
+# publish queue status for a topic to all subscribers
 def publish_queue_status(topic):
     serving_res = execute_with_retry(
         supabase.table(SERVING_TABLE)
@@ -63,17 +95,21 @@ def publish_queue_status(topic):
             "serving": serving_by_window.get(win),
         }
 
+    avg_sec = avg_service_seconds(topic)
+    avg_label = f"{avg_sec:.1f} sec." if avg_sec < 60 else f"{avg_sec / 60:.1f} min."
+
     message = {
         "topic": topic,
         "windows": windows_info,
+        "avg_service_seconds": avg_sec,
+        "avg_service_label": avg_label,
     }
     broker.publish(topic, message)
     return message
 
 
-# DATABASE METHODS
+# status of the line (how many people are in line and who is currently being served)
 def line_status(line, window):
-    """Returns (number this window is serving or None, how many are still waiting)."""
     row_res = execute_with_retry(
         supabase.table(SERVING_TABLE)
         .select('q_number')
@@ -111,14 +147,12 @@ def format_joined_time(ts):
     if not ts:
         return "-"
     try:
-        dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=ZoneInfo("UTC"))
-        return dt.astimezone(MANILA_TZ).strftime("%I:%M:%S %p")
+        dt = _parse_iso_ts(ts)
+        return dt.astimezone(MANILA_TZ).strftime("%I:%M:%S %p") if dt else "-"
     except ValueError:
         return str(ts)
 
-
+# clients in line
 def waiting_list(q_type):
     res = execute_with_retry(
         supabase.table(QUEUE_TABLE)
@@ -134,14 +168,50 @@ def waiting_list(q_type):
         for r in res.data
     ]
 
-
+#calculate the total clients served within the day
 def completed_total(q_type):
+    now = datetime.now(MANILA_TZ)
+    start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_day = start_of_day + timedelta(days=1)
+
     res = execute_with_retry(
         supabase.table(COMPLETED_TABLE)
         .select('id', count='exact')
         .eq('topic', q_type)
+        .gte('completed_at', start_of_day.isoformat())
+        .lt('completed_at', end_of_day.isoformat())
     )
     return res.count or 0
+
+
+#average service time per window
+def avg_service(topic, window):
+    rows = execute_with_retry(
+        supabase.table(COMPLETED_TABLE)
+        .select('started_at, completed_at')
+        .eq('topic', topic)
+        .eq('window', window)
+    )
+
+    durations = []
+    for row in rows.data or []:
+        start = _parse_iso_ts(row.get('started_at'))
+        end = _parse_iso_ts(row.get('completed_at'))
+        if start and end:
+            diff = (end - start).total_seconds()
+            if diff >= 0:
+                durations.append(diff)
+
+    if not durations:
+        return "0.0 sec."
+
+    average_service_time = sum(durations) / len(durations)
+    if average_service_time < 60:
+        return f"{average_service_time:.0f} sec."
+    elif average_service_time >= 60 and average_service_time < (60*60):
+        return f"{round(average_service_time / 60):.0f} min."
+    else:
+        return f"{round(average_service_time / (60*60)):.0f} hr."
 
 
 # LOGIN METHODS
@@ -213,17 +283,18 @@ def change_window_status():
 
 @auth.route('/cashier')
 def cashierControl():
-    type = "CASHIER"
+    topic = "CASHIER"
 
     if session.get('role') != 'cashier':
         return redirect(url_for('auth.login'))
 
     window = session['window']
-    window_status = window_statuses[type].get(window, 'close')
+    window_status = window_statuses[topic].get(window, 'close')
     serving, waiting = line_status('CASHIER', window)
-    queue_rows = waiting_list(type)
-    total_completed = completed_total(type)
+    queue_rows = waiting_list(topic)
+    total_completed = completed_total(topic)
     current_date = now_manila().strftime("%A, %B %d, %Y")
+    service_time = avg_service(topic, window)
 
     return render_template(
         "cashierControl.html",
@@ -232,6 +303,7 @@ def cashierControl():
         current_date=current_date,
         current_client=serving,
         total_waiting=waiting,
+        average_service=service_time,
         total_completed=total_completed,
         waiting_list=queue_rows,
     )
@@ -247,28 +319,31 @@ def cashier_status():
     serving, waiting = line_status(topic, window)
     queue_tickets = waiting_list(topic)
     total_completed = completed_total(topic)
+    service = avg_service(topic, window)
 
     return jsonify({
         "current_client": serving,
         "total_waiting": waiting,
         "total_completed": total_completed,
+        "average_service": service,
         "waiting_list": queue_tickets,
     })
 
 
 @auth.route('/registrar')
 def registrarControl():
-    type = "REGISTRAR"
+    topic = "REGISTRAR"
 
     if session.get('role') != 'registrar':
         return redirect(url_for('auth.login'))
 
     window = session['window']
-    window_status = window_statuses[type].get(window, 'close')
+    window_status = window_statuses[topic].get(window, 'close')
     serving, waiting = line_status('REGISTRAR', window)
-    queue_rows = waiting_list(type)
-    total_completed = completed_total(type)
+    queue_rows = waiting_list(topic)
+    total_completed = completed_total(topic)
     current_date = now_manila().strftime("%A, %B %d, %Y")
+    service = avg_service(topic, window)
 
     return render_template(
         "registrarControl.html",
@@ -278,6 +353,7 @@ def registrarControl():
         current_client=serving,
         total_waiting=waiting,
         total_completed=total_completed,
+        average_service=service,
         waiting_list=queue_rows,
     )
 
@@ -292,11 +368,13 @@ def registrar_status():
     serving, waiting = line_status(topic, window)
     queue_tickets = waiting_list(topic)
     total_completed = completed_total(topic)
+    service = avg_service(topic, window)
 
     return jsonify({
         "current_client": serving,
         "total_waiting": waiting,
         "total_completed": total_completed,
+        "average_service": service,
         "waiting_list": queue_tickets,
     })
 
@@ -342,7 +420,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-# NEXT BUTTON LOGIC METHODS (PUBLISHER EVENT)
+# NEXT BUTTON 
 @auth.route('/next', methods=["POST"])
 def next_customer():
     if session.get('role') not in ('cashier', 'registrar'):
@@ -415,27 +493,6 @@ def next_customer():
                 supabase.table(SERVING_TABLE).delete().eq("id", currently_serving.data[0]["id"])
             )
 
-        # Publish the updated window & serving state to all subscribers of `topic`
         publish_queue_status(topic)
 
-    return redirect(control_page())
-
-
-# FINISH BUTTON LOGIC METHODS
-@auth.route('/finish', methods=['POST'])
-def finish():
-    if session.get('role') not in ('cashier', 'registrar'):
-        return redirect(url_for('auth.login'))
-
-    with queue_lock:
-        execute_with_retry(
-            supabase.table(QUEUE_TABLE).delete().neq('id', '00000000-0000-0000-0000-000000000000')
-        )
-        execute_with_retry(
-            supabase.table(SERVING_TABLE).delete().gt('id', 0)
-        )
-        publish_queue_status('CASHIER')
-        publish_queue_status('REGISTRAR')
-
-    flash("All queue data was cleared.")
     return redirect(control_page())

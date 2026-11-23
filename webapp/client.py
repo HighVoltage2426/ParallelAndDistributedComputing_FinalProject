@@ -1,13 +1,13 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import time
 import uuid
-from zoneinfo import ZoneInfo
 from flask import Blueprint, render_template, session, flash, redirect, url_for, jsonify
 import httpx
 from supabase_client import supabase
-from .broker import broker
 
-from .auth import window_statuses
+from .broker import broker
+from .auth import avg_service_seconds, DEFAULT_SERVICE_SECONDS, window_statuses
 
 client = Blueprint('client', __name__)
 QUEUE_TABLE = 'QUEUEU'
@@ -34,14 +34,14 @@ def execute_with_retry(query_builder, retries=2, delay=0.15):
 subscriber_inbox = {}
 
 
-# SUBSCRIBER CALLBACK FACTORY
+# SUBSCRIBER CALLBACK
 def create_subscriber_callback(session_id):
     def receive_update(message):
         subscriber_inbox[session_id] = message
     return receive_update
 
 
-# HELPER: Subscribe student to chosen topic and ensure initial window status exists
+# Subscribe student to chosen topic and ensure initial window status exists
 def subscribe_student(session_id, topic):
     callback = create_subscriber_callback(session_id)
     broker.subscribe(topic, callback, subscriber_id=session_id)
@@ -66,6 +66,24 @@ def subscribe_student(session_id, topic):
         }
 
     return subscriber_inbox[session_id]["windows"]
+
+
+# Computation of the estimated wait time (in minutes)
+def compute_estimated_wait(topic, number_infront, inbox_entry=None):
+    avg_sec = DEFAULT_SERVICE_SECONDS
+    if inbox_entry and inbox_entry.get("avg_service_seconds") is not None:
+        avg_sec = float(inbox_entry["avg_service_seconds"])
+    else:
+        avg_sec = avg_service_seconds(topic)
+
+    total_seconds = max(0.0, number_infront * avg_sec)
+    
+    if total_seconds < 60:
+        return "few moments from now"
+    elif total_seconds >= 60 and total_seconds < 60*60:
+        return f"{round(total_seconds/60):.0f} minutes"
+    else: 
+        return f"{round(total_seconds/(60*60)):.1f} hour"
 
 
 # THIS CHECKS IF THE CURRENT DEVICE HAS AN ACTIVE SESSION
@@ -163,8 +181,8 @@ def line(topic):
             .lt('q_number', q_number)
         )
         number_infront = ahead_res.count or 0
-        wait_time = number_infront * 3
         windows = subscribe_student(session_id, q_type)
+        wait_time = compute_estimated_wait(q_type, number_infront, subscriber_inbox.get(session_id))
 
         return q_number, number_infront, wait_time, windows
 
@@ -184,7 +202,7 @@ def line(topic):
     session['q_number'] = q_number
     session['topic'] = topic
 
-    # Generate a fresh UUID per new queue entry so repeat visits never collide
+
     session_id = str(uuid.uuid4())
     session['session_id'] = session_id
 
@@ -214,10 +232,10 @@ def line(topic):
         .lt('q_number', q_number)
     )
     number_infront = ahead_res.count or 0
-    wait_time = number_infront * 3
 
-    # Subscribe student to the chosen topic (REGISTRAR or CASHIER)
+    # Subscribe student to the chosen topic (REGISTRAR or CASHIER) before reading inbox
     windows = subscribe_student(session_id, topic)
+    wait_time = compute_estimated_wait(topic, number_infront, subscriber_inbox.get(session_id))
 
     return q_number, number_infront, wait_time, windows
 
@@ -262,7 +280,8 @@ def qCashier():
 @client.route('/subscriber_status')
 def subscriber_status():
     session_id = getID()
-    data = dict(subscriber_inbox.get(session_id, {"windows": {}}))
+    inbox_entry = subscriber_inbox.get(session_id)
+    data = dict(inbox_entry or {"windows": {}})
 
     row_res = execute_with_retry(
         supabase.table(QUEUE_TABLE)
@@ -285,7 +304,7 @@ def subscriber_status():
         number_infront = ahead_res.count or 0
         data["my_q_number"] = int(q_number)
         data["number_infront"] = number_infront
-        data["wait_time"] = number_infront * 3
+        data["wait_time"] = compute_estimated_wait(q_type, number_infront, inbox_entry)
     elif session.get('q_number') is not None:
         data["my_q_number"] = int(session.get('q_number'))
         data["number_infront"] = 0
@@ -323,7 +342,6 @@ def your_turn():
                 serving_window = win_num
                 break
 
-        # Fallback directly to SERVING table if broker inbox wasn't populated yet
         if serving_window is None:
             serving_res = execute_with_retry(
                 supabase.table(SERVING_TABLE)
