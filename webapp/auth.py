@@ -96,13 +96,11 @@ def publish_queue_status(topic):
         }
 
     avg_sec = avg_service_seconds(topic)
-    avg_label = f"{avg_sec:.1f} sec." if avg_sec < 60 else f"{avg_sec / 60:.1f} min."
 
     message = {
         "topic": topic,
         "windows": windows_info,
         "avg_service_seconds": avg_sec,
-        "avg_service_label": avg_label,
     }
     broker.publish(topic, message)
     return message
