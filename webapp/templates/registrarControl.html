@@ -133,7 +133,6 @@
         document.getElementById("registrar_waiting").textContent = data.total_waiting;
         document.getElementById("registrar_completed").textContent = data.total_completed;
         document.getElementById("registrar_avg_service").textContent = data.average_service;
-
         document.getElementById("registrar_now_serving").textContent =
             data.current_client !== null && data.current_client !== undefined
                 ? `REG-${String(data.current_client).padStart(3, "0")}`
