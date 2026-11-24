@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
+import re
 import threading
 import time
 from zoneinfo import ZoneInfo
@@ -6,6 +7,7 @@ import httpx
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, session, url_for
 from supabase_client import supabase
 from .broker import broker
+UTC = timezone.utc
 
 auth = Blueprint('auth', __name__)
 QUEUE_TABLE = 'QUEUEU'
@@ -47,10 +49,19 @@ def execute_with_retry(query_builder, retries=2, delay=0.15):
             time.sleep(delay)
 
 
+def _normalize_iso(ts):
+    """Pad/trim fractional seconds to 6 digits so Python 3.10 can parse it."""
+    s = str(ts).replace("Z", "+00:00")
+    m = re.match(r"^(.*?\.)(\d+)(.*)$", s)
+    if m:
+        s = m.group(1) + m.group(2)[:6].ljust(6, "0") + m.group(3)
+    return s
+
+
 def _parse_iso_ts(ts):
     if not ts:
         return None
-    dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+    dt = datetime.fromisoformat(_normalize_iso(ts))
     if dt.tzinfo is None:
         dt = dt.replace(tzinfo=UTC)
     return dt
