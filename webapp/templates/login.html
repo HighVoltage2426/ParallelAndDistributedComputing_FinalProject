@@ -3,23 +3,59 @@
 {% block title %}High-Q Admin Log-In{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../static/styles.css" />
+    <main class="login-card">
+      <div class="login-brand">
+        <h1>HIGH-Q</h1>
+        <h2>{{ module_title | default("Cashier Module") }}</h2>
+      </div>
 
-    <h1>Admin Login</h1>
-    <p>High Voltage Only Page.</p>
+      <form class="login-form" method="post" action="{{ url_for('auth.login') }}">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <p class="login-error" role="alert">{{ messages[0] }}</p>
+            {% endif %}
+        {% endwith %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <p style="color: red;">{{ messages[0] }}</p>
-        {% endif %}
-    {% endwith %}
+        <div class="login-field">
+          <input
+            id="pin"
+            name="pin"
+            type="password"
+            inputmode="numeric"
+            pattern="[0-9]{4}"
+            minlength="4"
+            maxlength="4"
+            placeholder="Enter your 4-digit PIN"
+            autocomplete="current-password"
+            aria-label="PIN"
+            required
+            autofocus
+          />
+          <button class="login-field__toggle" type="button" id="togglePin" aria-label="Show PIN">
+            <i class="fa-solid fa-eye eye-on" aria-hidden="true"></i>
+            <i class="fa-solid fa-eye-slash eye-off" aria-hidden="true"></i>
+          </button>
+        </div>
 
-    <form method="post" action="{{ url_for('auth.login') }}">
-        <label for="pin">Enter 4-digit PIN</label><br>
-        <input id="pin" name="pin" type="password" inputmode="numeric"
-            pattern="[0-9]{4}" minlength="4" maxlength="4"
-            required autofocus><br><br>
+        <button class="join_queue_bttn login-btn" type="submit">Log in</button>
 
-        <button type="submit">Sign in</button>
-    </form>
+        <p class="login-forgot">
+          Forgot your password? <a href="#">Click Here.</a>
+        </p>
+      </form>
+    </main>
 
+    <script>
+      const pin = document.getElementById("pin");
+      const toggle = document.getElementById("togglePin");
+
+      toggle.addEventListener("click", () => {
+        const show = pin.type === "password";
+        pin.type = show ? "text" : "password";
+        toggle.classList.toggle("is-showing", show);
+        toggle.setAttribute("aria-label", show ? "Hide PIN" : "Show PIN");
+      });
+    </script>
 {% endblock %}
